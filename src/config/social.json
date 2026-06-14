@@ -3,17 +3,17 @@
     {
       "name": "facebook",
       "icon": "FaFacebook",
-      "link": "https://www.facebook.com/"
+      "link": "https://www.facebook.com/profile.php?id=61579423591583"
     },
     {
       "name": "X",
       "icon": "FaXTwitter",
-      "link": "https://x.com/"
+      "link": "https://x.com/Gaming_Pledge"
     },
     {
       "name": "instagram",
       "icon": "FaInstagram",
-      "link": "https://www.instagram.com/"
+      "link": "https://www.instagram.com/gamingpledge/"
     },
     {
       "name": "linkedin",
@@ -23,7 +23,7 @@
     {
       "name": "YouTube",
       "icon": "FaYoutube",
-      "link": "https://www.youtube.com/"
+      "link": "https://www.youtube.com/@gamingpledgetv/videos"
     }
   ]
 }

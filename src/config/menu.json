@@ -9,23 +9,14 @@
       "url": "/reviews"
     },
     {
-      "name": "Retro",
-      "url": "/retro"
-    },
-    {
       "name": "Features",
       "url": "/features"
     },
     {
-      "name": "Lists",
-      "url": "/lists"
+      "name": "Retro",
+      "url": "/retro"
     },
-    {
-      "name": "About",
-      "url": "/about"
-    }
-  ],
-  "footer": [
+    
     {
       "name": "About",
       "url": "/about"
@@ -33,22 +24,36 @@
     {
       "name": "Contact",
       "url": "/contact"
-    },
-    {
-      "name": "Reviews",
-      "url": "/reviews"
-    },
-    {
-      "name": "Retro",
-      "url": "/retro"
-    },
-    {
-      "name": "Features",
-      "url": "/features"
-    },
-    {
-      "name": "Privacy Policy",
-      "url": "/privacy-policy"
     }
-  ]
+  ],
+ "footer": [
+  {
+    "name": "About",
+    "url": "/about"
+  },
+  {
+    "name": "Reviews",
+    "url": "/reviews"
+  },
+  {
+    "name": "Retro",
+    "url": "/retro"
+  },
+  {
+    "name": "Features",
+    "url": "/features"
+  },
+  {
+    "name": "Lists",
+    "url": "/lists"
+  },
+  {
+    "name": "Contact",
+    "url": "/contact"
+  },
+  {
+    "name": "Privacy Policy",
+    "url": "/privacy-policy"
+}
+ ]
 }

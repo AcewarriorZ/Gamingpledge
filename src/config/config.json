@@ -23,13 +23,12 @@
     "gtm_id": "GTM-XXXXXX"
   },
 
-  "params": {
-    "contact_form_action": "#",
-    "copyright": "Copyright © 2026 a theme by [Themefisher](https://themefisher.com)"
-  },
-
+ "params": {
+  "contact_form_action": "#",
+  "copyright": "Copyright © 2026 Built by <a href='https://kgstudio.co.uk' target='_blank' rel='noopener'>KGStudio</a>"
+},
   "contactinfo": {
-    "address": "355 S Grand Ave <br/> Los Angeles, CA 90071",
+    "address": "Plymouth, United kingdom",
     "email": "info@.org",
     "phone": "+800 567 1234"
   }
