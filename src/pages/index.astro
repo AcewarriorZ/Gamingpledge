@@ -10,16 +10,36 @@ const getPostData = (post: any) => {
   return post?.frontmatter || post?.data || {};
 };
 
+const getPostCategories = (post: any) => {
+  const data = getPostData(post);
+  const categories = data.categories || [];
+
+  if (Array.isArray(categories)) {
+    return categories;
+  }
+
+  return [categories];
+};
+
 const usablePosts = sortedPosts.filter((post: any) => {
   const data = getPostData(post);
   return data.title && data.draft !== true;
 });
 
+const getPostsByCategory = (categoryName: string) => {
+  return usablePosts.filter((post: any) => {
+    return getPostCategories(post).some((category: string) => {
+      return String(category).toLowerCase() === categoryName.toLowerCase();
+    });
+  });
+};
+
 const heroPost = usablePosts[0];
 const sidePosts = usablePosts.slice(1, 4);
-const reviewPosts = usablePosts.slice(0, 2);
-const retroPosts = usablePosts.slice(2, 4);
-const featureFeedPosts = usablePosts.slice(0, 2);
+
+const reviewPosts = getPostsByCategory("Reviews").slice(0, 2);
+const retroPosts = getPostsByCategory("Retro").slice(0, 2);
+const featureFeedPosts = getPostsByCategory("Features").slice(0, 2);
 
 const featuredSections = [
   {
@@ -108,17 +128,6 @@ const getPostDate = (post: any) => {
   return data.date || data.publishDate || new Date().toISOString();
 };
 
-const getPostCategories = (post: any) => {
-  const data = getPostData(post);
-  const categories = data.categories || [];
-
-  if (Array.isArray(categories)) {
-    return categories;
-  }
-
-  return [categories];
-};
-
 const formatDate = (date: string) => {
   return new Intl.DateTimeFormat("en-GB", {
     day: "2-digit",
@@ -156,7 +165,7 @@ const formatDate = (date: string) => {
                     class="gp-main-image"
                   />
 
-                  <span class="gp-image-badge">Featured Review</span>
+                  <span class="gp-image-badge">Featured Pick</span>
                 </div>
 
                 <div class="gp-main-copy">
@@ -292,21 +301,28 @@ const formatDate = (date: string) => {
               <a href="/reviews">View all</a>
             </div>
 
-            <div class="gp-mini-grid">
-              {reviewPosts.map((post: any) => (
-                <a href={getPostUrl(post)} class="gp-mini-card">
-                  <img
-                    src={getPostImage(post)}
-                    alt={getPostTitle(post)}
-                    class="gp-mini-image"
-                  />
+            {reviewPosts.length > 0 ? (
+              <div class="gp-mini-grid">
+                {reviewPosts.map((post: any) => (
+                  <a href={getPostUrl(post)} class="gp-mini-card">
+                    <img
+                      src={getPostImage(post)}
+                      alt={getPostTitle(post)}
+                      class="gp-mini-image"
+                    />
 
-                  <h3>{getPostTitle(post)}</h3>
+                    <h3>{getPostTitle(post)}</h3>
 
-                  <p>{formatDate(getPostDate(post))}</p>
-                </a>
-              ))}
-            </div>
+                    <p>{formatDate(getPostDate(post))}</p>
+                  </a>
+                ))}
+              </div>
+            ) : (
+              <div class="gp-empty-card">
+                <p>No reviews yet.</p>
+                <span>Posts with the Reviews category will appear here.</span>
+              </div>
+            )}
           </div>
 
           <div>
@@ -315,52 +331,66 @@ const formatDate = (date: string) => {
               <a href="/retro">View all</a>
             </div>
 
-            <div class="gp-mini-grid">
-              {retroPosts.map((post: any) => (
-                <a href={getPostUrl(post)} class="gp-mini-card">
-                  <img
-                    src={getPostImage(post)}
-                    alt={getPostTitle(post)}
-                    class="gp-mini-image"
-                  />
+            {retroPosts.length > 0 ? (
+              <div class="gp-mini-grid">
+                {retroPosts.map((post: any) => (
+                  <a href={getPostUrl(post)} class="gp-mini-card">
+                    <img
+                      src={getPostImage(post)}
+                      alt={getPostTitle(post)}
+                      class="gp-mini-image"
+                    />
 
-                  <h3>{getPostTitle(post)}</h3>
+                    <h3>{getPostTitle(post)}</h3>
 
-                  <p>{formatDate(getPostDate(post))}</p>
-                </a>
-              ))}
-            </div>
+                    <p>{formatDate(getPostDate(post))}</p>
+                  </a>
+                ))}
+              </div>
+            ) : (
+              <div class="gp-empty-card">
+                <p>No retro picks yet.</p>
+                <span>Posts with the Retro category will appear here.</span>
+              </div>
+            )}
           </div>
         </div>
 
         <div class="gp-magazine-bottom-grid">
           <div class="gp-feature-feed">
-            {featureFeedPosts.map((post: any) => (
-              <a href={getPostUrl(post)} class="gp-feature-row">
-                <img
-                  src={getPostImage(post)}
-                  alt={getPostTitle(post)}
-                  class="gp-feature-image"
-                />
+            {featureFeedPosts.length > 0 ? (
+              featureFeedPosts.map((post: any) => (
+                <a href={getPostUrl(post)} class="gp-feature-row">
+                  <img
+                    src={getPostImage(post)}
+                    alt={getPostTitle(post)}
+                    class="gp-feature-image"
+                  />
 
-                <div>
-                  <p class="gp-feature-kicker">
-                    {getPostCategories(post).slice(0, 2).join(" › ") ||
-                      "GamingPledge"}
-                  </p>
+                  <div>
+                    <p class="gp-feature-kicker">
+                      {getPostCategories(post).slice(0, 2).join(" › ") ||
+                        "GamingPledge"}
+                    </p>
 
-                  <h3>{getPostTitle(post)}</h3>
+                    <h3>{getPostTitle(post)}</h3>
 
-                  <p class="gp-feature-description">
-                    {getPostDescription(post)}
-                  </p>
+                    <p class="gp-feature-description">
+                      {getPostDescription(post)}
+                    </p>
 
-                  <p class="gp-feature-meta">
-                    Published {formatDate(getPostDate(post))}
-                  </p>
-                </div>
-              </a>
-            ))}
+                    <p class="gp-feature-meta">
+                      Published {formatDate(getPostDate(post))}
+                    </p>
+                  </div>
+                </a>
+              ))
+            ) : (
+              <div class="gp-empty-card">
+                <p>No features yet.</p>
+                <span>Posts with the Features category will appear here.</span>
+              </div>
+            )}
           </div>
 
           <aside class="gp-newsletter-card">
@@ -1118,46 +1148,47 @@ const formatDate = (date: string) => {
       aspect-ratio: 16 / 9;
     }
   }
+
   /* Softer homepage typography */
-.gp-hero-intro h1,
-.gp-path-heading h2 {
-  font-weight: 800;
-  letter-spacing: -0.05em;
-}
+  .gp-hero-intro h1,
+  .gp-path-heading h2 {
+    font-weight: 800;
+    letter-spacing: -0.05em;
+  }
 
-.gp-main-copy h2,
-.gp-magazine-heading-row h2,
-.gp-newsletter-card h2 {
-  font-weight: 800;
-  letter-spacing: -0.04em;
-}
+  .gp-main-copy h2,
+  .gp-magazine-heading-row h2,
+  .gp-newsletter-card h2 {
+    font-weight: 800;
+    letter-spacing: -0.04em;
+  }
 
-.gp-path-copy h3,
-.gp-feature-row h3 {
-  font-weight: 750;
-  letter-spacing: -0.035em;
-}
+  .gp-path-copy h3,
+  .gp-feature-row h3 {
+    font-weight: 750;
+    letter-spacing: -0.035em;
+  }
 
-.gp-side-story h3,
-.gp-mini-card h3 {
-  font-weight: 700;
-  letter-spacing: -0.025em;
-}
+  .gp-side-story h3,
+  .gp-mini-card h3 {
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
 
-.gp-kicker,
-.gp-post-meta,
-.gp-meta,
-.gp-path-subtitle,
-.gp-path-stat > span {
-  font-weight: 700;
-}
+  .gp-kicker,
+  .gp-post-meta,
+  .gp-meta,
+  .gp-path-subtitle,
+  .gp-path-stat > span {
+    font-weight: 700;
+  }
 
-.gp-hero-intro > p,
-.gp-main-copy > p:last-child,
-.gp-path-heading > p,
-.gp-path-copy > p:last-child,
-.gp-feature-description,
-.gp-newsletter-box p {
-  font-weight: 400;
-}
+  .gp-hero-intro > p,
+  .gp-main-copy > p:last-child,
+  .gp-path-heading > p,
+  .gp-path-copy > p:last-child,
+  .gp-feature-description,
+  .gp-newsletter-box p {
+    font-weight: 400;
+  }
 </style>

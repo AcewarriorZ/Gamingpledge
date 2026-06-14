@@ -1,7 +1,7 @@
 ---
 title: "X-Men: Next Dimension – Mutant Mayhem With a Side of Clunk"
 description: "A retro PS2 review of X-Men: Next Dimension, a clunky but charming comic-book fighter filled with fan service and early-2000s chaos."
-date: 2025-11-29
+date: 2026-06-01
 image: "/images/posts/X-Men-Next-Dimension-Mutant-Mayhem-With-a-Side-of-Clunk.webp"
 categories: ["Reviews", "Retro"]
 tags: ["PS2", "X Men", "Retro Games", "Fighting Games", "Activision"]
