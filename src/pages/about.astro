@@ -1,0 +1,424 @@
+---
+import Base from "@/layouts/Base.astro";
+
+const pillars = [
+  {
+    title: "Reviews",
+    description:
+      "I review games based on how they feel, what they attempt, what still works and where they fall short.",
+  },
+  {
+    title: "Retro",
+    description:
+      "Older games are not just nostalgia. They are experiments, time capsules and design lessons worth revisiting.",
+  },
+  {
+    title: "Features",
+    description:
+      "Longer pieces on game design, atmosphere, storytelling, franchises and the strange corners of gaming history.",
+  },
+];
+
+const values = [
+  "No empty hype.",
+  "No forced neutrality.",
+  "No pretending a flawed game cannot still be fascinating.",
+  "No rushing through games just to publish faster.",
+];
+---
+
+<Base>
+  <main class="gp-about-page">
+    <section class="gp-about-hero">
+      <div class="gp-shell">
+        <p class="gp-kicker">About GamingPledge</p>
+
+        <div class="gp-about-heading">
+          <h1>A personal gaming blog for games worth remembering.</h1>
+
+          <p>
+            GamingPledge is my space for writing about games with a bit more
+            patience than the usual hype cycle allows. It is focused on honest
+            reviews, retro games, forgotten gems, licensed oddities and the titles
+            that still have something interesting to say years later.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="gp-about-pillars">
+      <div class="gp-shell">
+        <div class="gp-pillar-grid">
+          {
+            pillars.map((pillar) => (
+              <article class="gp-pillar-card">
+                <span></span>
+
+                <h2>{pillar.title}</h2>
+
+                <p>{pillar.description}</p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="gp-about-story">
+      <div class="gp-shell">
+        <div class="gp-story-grid">
+          <div>
+            <p class="gp-kicker">The idea behind the site</p>
+
+            <h2>Games are more than release dates, scores and discourse.</h2>
+          </div>
+
+          <div class="gp-story-copy">
+            <p>
+              Some games are brilliant. Some are broken. Some are awkward,
+              ambitious and weirdly charming. GamingPledge exists for all of them.
+              The aim is to write about games honestly, fairly and with enough
+              context to understand why they mattered, why they worked, or why
+              they missed.
+            </p>
+
+            <p>
+              This is a personal blog, so every article is written from my own
+              perspective. I care about feel, atmosphere, design, character,
+              memory and whether a game still earns your time once the hype has
+              moved on.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="gp-about-values">
+      <div class="gp-shell">
+        <div class="gp-values-card">
+          <div>
+            <p class="gp-kicker">The pledge</p>
+
+            <h2>Critical, but fair.</h2>
+          </div>
+
+          <ul>
+            {
+              values.map((value) => (
+                <li>{value}</li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="gp-about-cta">
+      <div class="gp-shell">
+        <div class="gp-cta-card">
+          <div>
+            <p class="gp-kicker">Contact</p>
+
+            <h2>Want to get in touch?</h2>
+
+            <p>
+              For review enquiries, indie game coverage, feedback or general
+              messages, you can reach out through the contact page.
+            </p>
+          </div>
+
+          <a href="/contact">
+            Contact Gaming Pledge
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Base>
+
+<style>
+  :global(body) {
+    background: #0f0f17;
+  }
+
+  .gp-about-page {
+    min-height: 100vh;
+    background: #0f0f17;
+    color: #fffdf7;
+  }
+
+  .gp-shell {
+    width: min(70rem, calc(100vw - 3rem));
+    margin-inline: auto;
+  }
+
+  .gp-about-hero {
+    padding: 4.5rem 0 3rem;
+  }
+
+  .gp-kicker {
+    margin: 0 0 0.75rem;
+    color: #d11149;
+    font-size: 0.78rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+  }
+
+  .gp-about-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.72fr);
+    gap: 2.5rem;
+    align-items: end;
+  }
+
+  .gp-about-heading h1 {
+    margin: 0;
+    max-width: 52rem;
+    color: #fffdf7;
+    font-size: clamp(3.1rem, 6vw, 5.8rem);
+    line-height: 0.92;
+    font-weight: 900;
+    letter-spacing: -0.07em;
+  }
+
+  .gp-about-heading p,
+  .gp-story-copy p,
+  .gp-cta-card p {
+    margin: 0;
+    color: #b8b1c7;
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+
+  .gp-about-pillars {
+    padding: 1rem 0 3.5rem;
+  }
+
+  .gp-pillar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .gp-pillar-card {
+    position: relative;
+    overflow: hidden;
+    min-height: 15rem;
+    border: 1px solid rgba(255, 253, 247, 0.12);
+    border-radius: 1.35rem;
+    background: #181821;
+    padding: 1.5rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.22);
+  }
+
+  .gp-pillar-card span {
+    display: block;
+    width: 2.5rem;
+    height: 0.35rem;
+    border-radius: 9999px;
+    background: #d11149;
+    margin-bottom: 1.5rem;
+  }
+
+  .gp-pillar-card:nth-child(2) span {
+    background: #f17105;
+  }
+
+  .gp-pillar-card:nth-child(3) span {
+    background: #6610f2;
+  }
+
+  .gp-pillar-card h2 {
+    margin: 0;
+    color: #fffdf7;
+    font-size: 1.6rem;
+    line-height: 1;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+  }
+
+  .gp-pillar-card p {
+    margin: 1rem 0 0;
+    color: #b8b1c7;
+    line-height: 1.7;
+  }
+
+  .gp-about-story {
+    padding: 3.5rem 0;
+    border-top: 1px solid rgba(255, 253, 247, 0.1);
+  }
+
+  .gp-story-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(18rem, 1.2fr);
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .gp-story-grid h2 {
+    margin: 0;
+    color: #fffdf7;
+    font-size: clamp(2.4rem, 4vw, 4rem);
+    line-height: 0.96;
+    font-weight: 900;
+    letter-spacing: -0.06em;
+  }
+
+  .gp-story-copy {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .gp-about-values {
+    padding: 1rem 0 3.5rem;
+  }
+
+  .gp-values-card {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(18rem, 1.2fr);
+    gap: 2rem;
+    align-items: start;
+    border: 1px solid rgba(255, 253, 247, 0.12);
+    border-radius: 1.35rem;
+    background: #181821;
+    padding: 2rem;
+  }
+
+  .gp-values-card h2 {
+    margin: 0;
+    color: #fffdf7;
+    font-size: clamp(2rem, 3vw, 3rem);
+    line-height: 1;
+    font-weight: 900;
+    letter-spacing: -0.055em;
+  }
+
+  .gp-values-card ul {
+    display: grid;
+    gap: 0.85rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .gp-values-card li {
+    position: relative;
+    padding-left: 1.5rem;
+    color: #fffdf7;
+    font-size: 1.02rem;
+    font-weight: 800;
+    line-height: 1.55;
+  }
+
+  .gp-values-card li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.55rem;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 9999px;
+    background: #e6c229;
+  }
+
+  .gp-about-cta {
+    padding: 0 0 5rem;
+  }
+
+  .gp-cta-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 2rem;
+    align-items: center;
+    border: 1px solid rgba(255, 253, 247, 0.12);
+    border-radius: 1.35rem;
+    background:
+      linear-gradient(135deg, rgba(209, 17, 73, 0.16), transparent 44%),
+      #181821;
+    padding: 2rem;
+  }
+
+  .gp-cta-card h2 {
+    margin: 0 0 0.75rem;
+    color: #fffdf7;
+    font-size: clamp(2rem, 3vw, 3rem);
+    line-height: 1;
+    font-weight: 900;
+    letter-spacing: -0.055em;
+  }
+
+  .gp-cta-card a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3rem;
+    border-radius: 0.75rem;
+    background: #d11149;
+    padding: 0.85rem 1.2rem;
+    color: #fffdf7;
+    font-weight: 900;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      transform 0.2s ease,
+      background 0.2s ease;
+  }
+
+  .gp-cta-card a:hover {
+    transform: translateY(-0.15rem);
+    background: #f17105;
+  }
+
+  @media (max-width: 900px) {
+    .gp-about-heading,
+    .gp-story-grid,
+    .gp-values-card,
+    .gp-cta-card {
+      grid-template-columns: 1fr;
+    }
+
+    .gp-pillar-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .gp-cta-card a {
+      width: fit-content;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .gp-shell {
+      width: min(100% - 2rem, 70rem);
+    }
+
+    .gp-about-hero {
+      padding-top: 3.5rem;
+    }
+  }
+  /* Softer About page typography */
+.gp-about-heading h1,
+.gp-story-grid h2,
+.gp-values-card h2,
+.gp-cta-card h2 {
+  font-weight: 800;
+  letter-spacing: -0.045em;
+}
+
+.gp-pillar-card h2 {
+  font-weight: 750;
+  letter-spacing: -0.03em;
+}
+
+.gp-values-card li,
+.gp-cta-card a {
+  font-weight: 700;
+}
+
+.gp-about-heading p,
+.gp-story-copy p,
+.gp-cta-card p,
+.gp-pillar-card p {
+  font-weight: 400;
+}
+</style>

@@ -1,0 +1,698 @@
+---
+import Base from "@/layouts/Base.astro";
+import { getSinglePage } from "@/lib/contentParser.astro";
+import { sortByDate } from "@/lib/utils/sortFunctions";
+
+interface Props {
+  categoryName: string;
+  kicker?: string;
+  heading: string;
+  description: string;
+  featuredLabel?: string;
+  sidebarPrimaryTitle?: string;
+  sidebarSecondaryTitle?: string;
+}
+
+const {
+  categoryName,
+  kicker = "Gaming Pledge",
+  heading,
+  description,
+  featuredLabel = "Featured",
+  sidebarPrimaryTitle = "Gaming Pledge Recommends",
+  sidebarSecondaryTitle = "Popular on Gaming Pledge",
+} = Astro.props;
+
+const posts = await getSinglePage("posts");
+const sortedPosts = sortByDate(posts);
+
+const getPostData = (post: any) => {
+  return post?.frontmatter || post?.data || {};
+};
+
+const getPostCategories = (post: any) => {
+  const data = getPostData(post);
+  const categories = data.categories || [];
+
+  if (Array.isArray(categories)) {
+    return categories;
+  }
+
+  return [categories];
+};
+
+const usablePosts = sortedPosts.filter((post: any) => {
+  const data = getPostData(post);
+  return data.title && data.draft !== true;
+});
+
+const categoryPosts = usablePosts.filter((post: any) => {
+  return getPostCategories(post).some((category: string) => {
+    return category.toLowerCase() === categoryName.toLowerCase();
+  });
+});
+
+const heroPost = categoryPosts[0];
+const topSidePosts = categoryPosts.slice(1, 4);
+const latestPosts = categoryPosts.slice(1);
+const recommendedPosts = usablePosts.slice(0, 4);
+const popularPosts = usablePosts.slice(2, 8);
+
+const getPostUrl = (post: any) => {
+  const slug = post.slug || post.id || "";
+
+  if (slug.startsWith("blog/")) {
+    return `/${slug}`;
+  }
+
+  return `/blog/${slug}`;
+};
+
+const getPostImage = (post: any) => {
+  const data = getPostData(post);
+  const image = data.image;
+
+  if (typeof image === "string") {
+    return image;
+  }
+
+  if (image?.src) {
+    return image.src;
+  }
+
+  return "/images/image-placeholder.png";
+};
+
+const getPostTitle = (post: any) => {
+  const data = getPostData(post);
+  return data.title || "Untitled post";
+};
+
+const getPostDescription = (post: any) => {
+  const data = getPostData(post);
+  return data.description || data.excerpt || "";
+};
+
+const getPostDate = (post: any) => {
+  const data = getPostData(post);
+  return data.date || data.publishDate || new Date().toISOString();
+};
+
+const getPostScore = (post: any) => {
+  const data = getPostData(post);
+  return data.score || data.rating || null;
+};
+
+const formatDate = (date: string) => {
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  }).format(new Date(date));
+};
+---
+
+<Base>
+  <main class="gp-category-page">
+    <section class="gp-category-shell">
+      <div class="gp-page-heading">
+        <p class="gp-kicker">{kicker}</p>
+
+        <h1>{heading}</h1>
+
+        <p>{description}</p>
+      </div>
+
+      {
+        heroPost ? (
+          <div class="gp-top-grid">
+            <a href={getPostUrl(heroPost)} class="gp-feature-card">
+              <div class="gp-feature-image-wrap">
+                <img
+                  src={getPostImage(heroPost)}
+                  alt={getPostTitle(heroPost)}
+                  class="gp-feature-image"
+                />
+
+                <span class="gp-feature-badge">{featuredLabel}</span>
+
+                {getPostScore(heroPost) && (
+                  <span class="gp-score-badge">{getPostScore(heroPost)}</span>
+                )}
+              </div>
+
+              <div class="gp-feature-copy">
+                <h2>{getPostTitle(heroPost)}</h2>
+
+                <p class="gp-meta">
+                  {formatDate(getPostDate(heroPost))}
+                  {getPostCategories(heroPost).length > 0 && (
+                    <> • {getPostCategories(heroPost).slice(0, 2).join(", ")}</>
+                  )}
+                </p>
+              </div>
+            </a>
+
+            <aside class="gp-top-list">
+              {topSidePosts.length > 0 ? (
+                topSidePosts.map((post: any) => (
+                  <a href={getPostUrl(post)} class="gp-top-list-item">
+                    <div>
+                      <h3>{getPostTitle(post)}</h3>
+
+                      <p class="gp-meta">
+                        {formatDate(getPostDate(post))}
+                      </p>
+                    </div>
+
+                    <div class="gp-top-thumb-wrap">
+                      <img
+                        src={getPostImage(post)}
+                        alt={getPostTitle(post)}
+                        class="gp-top-thumb"
+                      />
+
+                      {getPostScore(post) && (
+                        <span class="gp-small-score">{getPostScore(post)}</span>
+                      )}
+                    </div>
+                  </a>
+                ))
+              ) : (
+                <div class="gp-empty-box">
+                  <p>More {categoryName.toLowerCase()} pieces coming soon.</p>
+                </div>
+              )}
+            </aside>
+          </div>
+        ) : (
+          <div class="gp-empty-box">
+            <h2>No {categoryName.toLowerCase()} posts yet.</h2>
+
+            <p>
+              Add your first {categoryName.toLowerCase()} post inside{" "}
+              <code>src/content/posts</code>.
+            </p>
+          </div>
+        )
+      }
+
+      <div class="gp-content-grid">
+        <section class="gp-latest-feed">
+          <h2 class="gp-section-title">Latest Stories</h2>
+
+          {
+            latestPosts.length > 0 ? (
+              <div class="gp-story-list">
+                {latestPosts.map((post: any) => (
+                  <a href={getPostUrl(post)} class="gp-story-row">
+                    <img
+                      src={getPostImage(post)}
+                      alt={getPostTitle(post)}
+                      class="gp-story-image"
+                    />
+
+                    <div class="gp-story-copy">
+                      <h3>{getPostTitle(post)}</h3>
+
+                      <p class="gp-meta">
+                        {formatDate(getPostDate(post))}
+                        {getPostCategories(post).length > 0 && (
+                          <> • {getPostCategories(post).slice(0, 2).join(", ")}</>
+                        )}
+                      </p>
+
+                      <p class="gp-story-description">
+                        {getPostDescription(post)}
+                      </p>
+                    </div>
+
+                    <div class="gp-story-rating">
+                      {getPostScore(post) ? (
+                        <>
+                          <span>{getPostScore(post)}</span>
+                          <small>Score</small>
+                        </>
+                      ) : (
+                        <>
+                          <span>GP</span>
+                          <small>{categoryName}</small>
+                        </>
+                      )}
+                    </div>
+                  </a>
+                ))}
+              </div>
+            ) : (
+              <div class="gp-empty-box">
+                <p>More {categoryName.toLowerCase()} stories will appear here soon.</p>
+              </div>
+            )
+          }
+        </section>
+
+        <aside class="gp-sidebar">
+          <div class="gp-sidebar-card gp-sidebar-card-yellow">
+            <h2>{sidebarPrimaryTitle}</h2>
+
+            <div class="gp-sidebar-list">
+              {recommendedPosts.slice(0, 4).map((post: any) => (
+                <a href={getPostUrl(post)} class="gp-sidebar-item">
+                  <img
+                    src={getPostImage(post)}
+                    alt={getPostTitle(post)}
+                  />
+
+                  <h3>{getPostTitle(post)}</h3>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div class="gp-sidebar-card gp-sidebar-card-blue">
+            <h2>{sidebarSecondaryTitle}</h2>
+
+            <div class="gp-sidebar-list">
+              {popularPosts.slice(0, 6).map((post: any) => (
+                <a href={getPostUrl(post)} class="gp-sidebar-item">
+                  <img
+                    src={getPostImage(post)}
+                    alt={getPostTitle(post)}
+                  />
+
+                  <h3>{getPostTitle(post)}</h3>
+                </a>
+              ))}
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+</Base>
+
+<style>
+  :global(body) {
+    background: #0f0f17;
+  }
+
+  .gp-category-page {
+    min-height: 100vh;
+    background: #0f0f17;
+    color: #fffdf7;
+  }
+
+  .gp-category-shell {
+    width: min(70rem, calc(100vw - 3rem));
+    margin-inline: auto;
+    padding: 4rem 0 5rem;
+  }
+
+  .gp-page-heading {
+    max-width: 54rem;
+    margin-bottom: 2rem;
+  }
+
+  .gp-kicker {
+    margin: 0 0 0.7rem;
+    color: #d11149;
+    font-size: 0.78rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+  }
+
+  .gp-page-heading h1 {
+    margin: 0;
+    color: #fffdf7;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    line-height: 0.92;
+    font-weight: 900;
+    letter-spacing: -0.07em;
+  }
+
+  .gp-page-heading p {
+    max-width: 46rem;
+    margin: 1rem 0 0;
+    color: #b8b1c7;
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+
+  .gp-top-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(19rem, 0.75fr);
+    gap: 2.5rem;
+    align-items: start;
+    margin-bottom: 3rem;
+  }
+
+  .gp-feature-card,
+  .gp-top-list-item,
+  .gp-story-row,
+  .gp-sidebar-item {
+    text-decoration: none;
+  }
+
+  .gp-feature-image-wrap {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1.1rem;
+    border: 1px solid rgba(255, 253, 247, 0.12);
+    background: #181821;
+  }
+
+  .gp-feature-image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    transition:
+      transform 0.4s ease,
+      filter 0.4s ease;
+  }
+
+  .gp-feature-card:hover .gp-feature-image {
+    transform: scale(1.035);
+    filter: saturate(1.08) contrast(1.04);
+  }
+
+  .gp-feature-badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    border-radius: 9999px;
+    background: #d11149;
+    padding: 0.5rem 0.8rem;
+    color: #fffdf7;
+    font-size: 0.7rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .gp-score-badge,
+  .gp-small-score {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    border: 3px solid #d11149;
+    background: #fffdf7;
+    color: #0f0f17;
+    font-weight: 900;
+  }
+
+  .gp-score-badge {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    width: 3.4rem;
+    height: 3.4rem;
+    font-size: 1.25rem;
+  }
+
+  .gp-feature-copy {
+    margin-top: 1rem;
+  }
+
+  .gp-feature-copy h2 {
+    margin: 0;
+    color: #fffdf7;
+    font-size: clamp(1.6rem, 3vw, 2.35rem);
+    line-height: 1.08;
+    font-weight: 900;
+    letter-spacing: -0.045em;
+    transition: color 0.2s ease;
+  }
+
+  .gp-feature-card:hover h2,
+  .gp-top-list-item:hover h3,
+  .gp-story-row:hover h3,
+  .gp-sidebar-item:hover h3 {
+    color: #e6c229;
+  }
+
+  .gp-meta {
+    margin: 0.55rem 0 0;
+    color: #b8b1c7;
+    font-size: 0.76rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .gp-top-list {
+    display: grid;
+    gap: 0;
+    border-left: 1px solid rgba(255, 253, 247, 0.12);
+    padding-left: 2rem;
+  }
+
+  .gp-top-list-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 7rem;
+    gap: 1rem;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 253, 247, 0.12);
+    padding: 1rem 0;
+  }
+
+  .gp-top-list-item:first-child {
+    padding-top: 0;
+  }
+
+  .gp-top-list-item h3 {
+    margin: 0;
+    color: #fffdf7;
+    font-size: 1rem;
+    line-height: 1.25;
+    font-weight: 900;
+    letter-spacing: -0.035em;
+    transition: color 0.2s ease;
+  }
+
+  .gp-top-thumb-wrap {
+    position: relative;
+  }
+
+  .gp-top-thumb {
+    display: block;
+    width: 7rem;
+    height: 4.2rem;
+    border-radius: 0.65rem;
+    object-fit: cover;
+  }
+
+  .gp-small-score {
+    position: absolute;
+    right: -0.45rem;
+    top: -0.45rem;
+    width: 2rem;
+    height: 2rem;
+    border-width: 2px;
+    font-size: 0.8rem;
+  }
+
+  .gp-content-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(19rem, 0.65fr);
+    gap: 3.2rem;
+    align-items: start;
+  }
+
+  .gp-section-title {
+    margin: 0 0 1.25rem;
+    color: #fffdf7;
+    font-size: 1.5rem;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+  }
+
+  .gp-story-list {
+    display: grid;
+    gap: 0;
+  }
+
+  .gp-story-row {
+    display: grid;
+    grid-template-columns: 12rem minmax(0, 1fr) 3.6rem;
+    gap: 1.25rem;
+    align-items: center;
+    border-top: 1px solid rgba(255, 253, 247, 0.12);
+    padding: 1.25rem 0;
+  }
+
+  .gp-story-row:first-child {
+    border-top: 0;
+  }
+
+  .gp-story-image {
+    display: block;
+    width: 12rem;
+    aspect-ratio: 16 / 9;
+    border-radius: 0.75rem;
+    object-fit: cover;
+  }
+
+  .gp-story-copy h3 {
+    margin: 0;
+    color: #fffdf7;
+    font-size: 1.05rem;
+    line-height: 1.25;
+    font-weight: 900;
+    letter-spacing: -0.035em;
+    transition: color 0.2s ease;
+  }
+
+  .gp-story-description {
+    margin: 0.55rem 0 0;
+    color: #b8b1c7;
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+
+  .gp-story-rating {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    justify-self: end;
+    width: 3.1rem;
+    height: 3.1rem;
+    border: 2px solid #d11149;
+    border-radius: 9999px;
+    background: #fffdf7;
+    color: #0f0f17;
+  }
+
+  .gp-story-rating span {
+    font-size: 1rem;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .gp-story-rating small {
+    margin-top: 0.18rem;
+    font-size: 0.46rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .gp-sidebar {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .gp-sidebar-card {
+    border-radius: 1rem;
+    background: #181821;
+    padding: 1.25rem;
+  }
+
+  .gp-sidebar-card-yellow {
+    border: 3px solid #e6c229;
+  }
+
+  .gp-sidebar-card-blue {
+    border: 3px solid #6610f2;
+  }
+
+  .gp-sidebar-card h2 {
+    margin: 0 0 1rem;
+    color: #fffdf7;
+    font-size: 1.15rem;
+    font-weight: 900;
+    letter-spacing: -0.035em;
+  }
+
+  .gp-sidebar-list {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .gp-sidebar-item {
+    display: grid;
+    grid-template-columns: 5.2rem minmax(0, 1fr);
+    gap: 0.8rem;
+    align-items: center;
+  }
+
+  .gp-sidebar-item img {
+    display: block;
+    width: 5.2rem;
+    aspect-ratio: 16 / 9;
+    border-radius: 0.55rem;
+    object-fit: cover;
+  }
+
+  .gp-sidebar-item h3 {
+    margin: 0;
+    color: #fffdf7;
+    font-size: 0.85rem;
+    line-height: 1.25;
+    font-weight: 900;
+    transition: color 0.2s ease;
+  }
+
+  .gp-empty-box {
+    border: 1px solid rgba(255, 253, 247, 0.12);
+    border-radius: 1rem;
+    background: #181821;
+    padding: 1.5rem;
+    color: #b8b1c7;
+  }
+
+  .gp-empty-box h2,
+  .gp-empty-box p {
+    margin: 0;
+  }
+
+  .gp-empty-box p + p {
+    margin-top: 0.8rem;
+  }
+
+  @media (max-width: 1050px) {
+    .gp-top-grid,
+    .gp-content-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .gp-top-list {
+      border-left: 0;
+      padding-left: 0;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .gp-story-row {
+      grid-template-columns: 1fr;
+    }
+
+    .gp-story-image {
+      width: 100%;
+    }
+
+    .gp-story-rating {
+      justify-self: start;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .gp-category-shell {
+      width: min(100% - 2rem, 70rem);
+      padding-top: 3rem;
+    }
+
+    .gp-top-list-item {
+      grid-template-columns: 1fr;
+    }
+
+    .gp-top-thumb {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+    }
+  }
+</style>

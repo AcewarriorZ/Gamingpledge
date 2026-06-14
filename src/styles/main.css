@@ -1,0 +1,245 @@
+@import "tailwindcss";
+@plugin "../tailwind-plugin/tw-theme.mjs";
+@plugin "../tailwind-plugin/tw-bs-grid.mjs";
+@plugin "@tailwindcss/forms";
+@plugin "@tailwindcss/typography";
+
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap");
+
+@import "./safe.css";
+@import "./utilities.css";
+
+@layer base {
+  @import "./base.css";
+}
+
+@layer components {
+  @import "./components.css";
+  @import "./navigation.css";
+  @import "./buttons.css";
+}
+
+@font-face {
+  font-family: "Dealer Strike";
+  src: url("/fonts/dealer-strike.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Gaming Pledge brand palette */
+:root {
+  --gp-dust: #0f0f17;
+  --gp-pink: #d11149;
+  --gp-orange: #f17105;
+  --gp-yellow: #e6c229;
+  --gp-purple: #6610f2;
+  --gp-cream: #fffdf7;
+  --gp-muted: #b8b1c7;
+  --gp-card: #181821;
+  --gp-card-soft: #201f2a;
+  --gp-border: rgba(255, 253, 247, 0.12);
+}
+
+/* Base typography */
+html,
+body {
+  background: var(--gp-dust);
+}
+
+body {
+  color: var(--gp-cream);
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  letter-spacing: -0.035em;
+}
+
+/* Global link behaviour */
+a {
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+/* Brand utility overrides */
+.text-primary {
+  color: var(--gp-pink) !important;
+}
+
+.bg-primary {
+  background-color: var(--gp-pink) !important;
+}
+
+.border-border {
+  border-color: var(--gp-border) !important;
+}
+
+.bg-light,
+.bg-body {
+  background-color: var(--gp-card) !important;
+}
+
+.text-dark {
+  color: var(--gp-cream) !important;
+}
+
+.text-text-light {
+  color: var(--gp-muted) !important;
+}
+
+/* Header logo */
+.gamingpledge-logo {
+  display: inline-flex;
+  align-items: center;
+  color: var(--gp-cream);
+  font-family: "Dealer Strike", "Space Grotesk", system-ui, sans-serif !important;
+  font-size: clamp(2rem, 3vw, 3rem);
+  line-height: 1;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.gamingpledge-logo:hover {
+  color: var(--gp-yellow);
+}
+
+/* Header/nav polish */
+header,
+.navbar,
+.navigation,
+.site-header {
+  background: var(--gp-dust) !important;
+}
+
+header a,
+.navbar a,
+.navigation a,
+.site-header a {
+  color: var(--gp-cream);
+}
+
+header a:hover,
+.navbar a:hover,
+.navigation a:hover,
+.site-header a:hover {
+  color: var(--gp-yellow);
+}
+
+/* Header alignment: safe version */
+header .container,
+header .container-fluid,
+.navbar .container,
+.navbar .container-fluid,
+.site-header .container,
+.site-header .container-fluid {
+  width: min(70rem, calc(100vw - 3rem));
+  max-width: 70rem;
+  margin-inline: auto;
+}
+
+/* Buttons */
+button,
+.btn,
+.button {
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+}
+
+.btn-primary,
+button[type="submit"] {
+  background: var(--gp-pink);
+  color: var(--gp-cream);
+}
+
+.btn-primary:hover,
+button[type="submit"]:hover {
+  background: var(--gp-orange);
+}
+
+/* Form fields */
+input,
+textarea,
+select {
+  border-color: var(--gp-border);
+  background: var(--gp-card);
+  color: var(--gp-cream);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(255, 253, 247, 0.45);
+}
+
+/* Cards and article surfaces */
+.card,
+.post-card,
+.rounded-3xl,
+.rounded-2xl {
+  border-color: var(--gp-border);
+}
+
+/* Footer */
+footer {
+  background: var(--gp-dust);
+  color: var(--gp-cream);
+}
+
+footer a {
+  color: var(--gp-muted);
+}
+
+footer a:hover {
+  color: var(--gp-yellow);
+}
+
+/* Selection */
+::selection {
+  background: var(--gp-yellow);
+  color: var(--gp-dust);
+}
+
+/* Mobile safety */
+@media (max-width: 768px) {
+  .gamingpledge-logo {
+    font-size: clamp(1.75rem, 8vw, 2.4rem);
+  }
+
+  header .container,
+  header .container-fluid,
+  .navbar .container,
+  .navbar .container-fluid,
+  .site-header .container,
+  .site-header .container-fluid {
+    width: min(100% - 2rem, 70rem);
+  }
+}
+/* Fine tune header logo alignment */
+@media (min-width: 1024px) {
+  .gamingpledge-logo {
+    transform: translateX(-5.75rem);
+  }
+}
+/* Sticky Gaming Pledge header */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  background: rgba(15, 15, 23, 0.92) !important;
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 253, 247, 0.08);
+}

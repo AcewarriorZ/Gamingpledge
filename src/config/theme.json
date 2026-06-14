@@ -1,0 +1,28 @@
+{
+  "colors": {
+    "default": {
+      "theme_color": {
+        "primary": "#D11149",
+        "body": "#0F0F17",
+        "border": "#2A2633",
+        "light": "#181821",
+        "dark": "#0F0F17"
+      },
+      "text_color": {
+        "text": "#EAE7F0",
+        "text-dark": "#FFFDF7",
+        "text-light": "#B8B1C7"
+      }
+    }
+  },
+  "fonts": {
+    "font_family": {
+      "primary": "IBM Plex Sans:wght@400;500;600;700",
+      "primary_type": "sans-serif"
+    },
+    "font_size": {
+      "base": "16",
+      "scale": "1.22"
+    }
+  }
+}

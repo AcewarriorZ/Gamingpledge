@@ -1,0 +1,669 @@
+---
+import Share from "@/components/Share.astro";
+import SimilarPosts from "@/components/SimilarPosts.astro";
+import { getSinglePage } from "@/lib/contentParser.astro";
+import dateFormat from "@/lib/utils/dateFormat";
+import similerItems from "@/lib/utils/similarItems";
+import { humanize, markdownify, slugify } from "@/lib/utils/textConverter";
+import { render } from "astro:content";
+
+const allAuthors = await getSinglePage("authors");
+const posts = await getSinglePage("posts");
+
+const { post } = Astro.props;
+const similarPosts = similerItems(post, posts, post.slug);
+const { Content } = await render(post);
+
+const {
+  title,
+  description,
+  authors = [],
+  categories = [],
+  image,
+  date,
+  tags = [],
+  score,
+  scoreLabel,
+  verdict,
+  bestFor,
+  strongestPoint,
+  weakestPoint,
+} = post.data;
+
+const toArray = (value: any) => {
+  if (Array.isArray(value)) {
+    return value.filter(Boolean);
+  }
+
+  return value ? [value] : [];
+};
+
+const postAuthors = toArray(authors);
+const postCategories = toArray(categories);
+const postTags = toArray(tags);
+
+const isReview = postCategories.some((category: string) => {
+  return slugify(String(category)) === "reviews" || slugify(String(category)) === "review";
+});
+
+const hasScore =
+  score !== undefined &&
+  score !== null &&
+  String(score).trim() !== "";
+
+const scoreDisplay = hasScore
+  ? String(score).replace(/\s*\/\s*(100|10)\s*$/i, "").trim()
+  : "";
+
+const hasScoreCard =
+  isReview &&
+  (hasScore || scoreLabel || verdict || bestFor || strongestPoint || weakestPoint);
+
+const getImageSrc = (imageValue: any) => {
+  if (!imageValue) {
+    return "";
+  }
+
+  if (typeof imageValue === "string") {
+    return imageValue;
+  }
+
+  if (imageValue.src) {
+    return imageValue.src;
+  }
+
+  return "";
+};
+
+const heroImage = getImageSrc(image);
+
+const matchedAuthors = allAuthors.filter((author) =>
+  postAuthors
+    .map((authorName: string) => slugify(String(authorName)))
+    .includes(slugify(author.data.title))
+);
+---
+
+<article class="gp-post-page">
+  <section class="gp-post-hero">
+    <div class="gp-post-shell">
+      <div class="gp-post-meta-row">
+        {date && <span>{dateFormat(date)}</span>}
+
+        {postCategories.length > 0 && (
+          <>
+            <span>•</span>
+
+            <span>
+              {postCategories.map((category) => humanize(String(category))).join(", ")}
+            </span>
+          </>
+        )}
+      </div>
+
+      <h1 set:html={markdownify(title)} />
+
+      {description && (
+        <p class="gp-post-description">
+          {description}
+        </p>
+      )}
+
+      {matchedAuthors.length > 0 && (
+        <div class="gp-author-row">
+          {matchedAuthors.map((author) => (
+            <a
+              href={`/authors/${slugify(author.id)}`}
+              class="gp-author"
+            >
+              {author.data.image && (
+                <img
+                  src={getImageSrc(author.data.image)}
+                  alt={author.data.title}
+                />
+              )}
+
+              <span>By {author.data.title}</span>
+            </a>
+          ))}
+        </div>
+      )}
+
+      {heroImage && (
+        <div class="gp-post-image-wrap">
+          <img
+            src={heroImage}
+            alt={title}
+            class="gp-post-image"
+          />
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section class="gp-post-body-section">
+    <div class="gp-post-content-shell">
+      <div class="gp-post-content">
+        <Content />
+      </div>
+
+      {hasScoreCard && (
+        <aside class="gp-review-score-card" aria-label="GamingPledge review score">
+          <div class="gp-score-main">
+            <p>GamingPledge Score</p>
+
+            <div class="gp-score-number">
+              <strong>{scoreDisplay || "TBC"}</strong>
+
+              {scoreDisplay && <span>/100</span>}
+            </div>
+
+            <span class="gp-score-label">
+              {scoreLabel || "Final Verdict"}
+            </span>
+          </div>
+
+          <div class="gp-score-details">
+            {verdict && (
+              <div>
+                <p>Verdict</p>
+                <strong>{verdict}</strong>
+              </div>
+            )}
+
+            {bestFor && (
+              <div>
+                <p>Best for</p>
+                <strong>{bestFor}</strong>
+              </div>
+            )}
+
+            {strongestPoint && (
+              <div>
+                <p>Strongest point</p>
+                <strong>{strongestPoint}</strong>
+              </div>
+            )}
+
+            {weakestPoint && (
+              <div>
+                <p>Weakest point</p>
+                <strong>{weakestPoint}</strong>
+              </div>
+            )}
+          </div>
+        </aside>
+      )}
+
+      <div class="gp-post-footer">
+        {postTags.length > 0 && (
+          <ul class="gp-tag-list">
+            {postTags.map((tag: string) => (
+              <li>
+                <a href={`/tags/${slugify(tag)}`}>
+                  #{humanize(tag)}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <div class="gp-share-wrap">
+          <p>Share this article</p>
+
+          <Share
+            className="social-share"
+            title={title}
+            description={description}
+            slug={post.id}
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+</article>
+
+{
+  similarPosts.length > 0 && (
+    <section class="gp-similar-section">
+      <div class="gp-post-shell">
+        <div class="gp-similar-heading">
+          <p>Continue Reading</p>
+
+          <h2>More from GamingPledge</h2>
+        </div>
+
+        <SimilarPosts posts={similarPosts.slice(0, 3)} />
+      </div>
+    </section>
+  )
+}
+
+<style>
+  :global(body) {
+    background: #0f0f17;
+  }
+
+  .gp-post-page {
+    background: #0f0f17;
+    color: #fffdf7;
+  }
+
+  .gp-post-shell {
+    width: min(70rem, calc(100vw - 3rem));
+    margin-inline: auto;
+  }
+
+  .gp-post-hero {
+    padding: 4rem 0 2.5rem;
+  }
+
+  .gp-post-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    align-items: center;
+    margin-bottom: 1.1rem;
+    color: #d11149;
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .gp-post-hero h1 {
+    max-width: 58rem;
+    margin: 0;
+    color: #fffdf7;
+    font-size: clamp(2.6rem, 4.7vw, 4.8rem);
+    line-height: 0.96;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+  }
+
+  .gp-post-description {
+    max-width: 47rem;
+    margin: 1.35rem 0 0;
+    color: #b8b1c7;
+    font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+    line-height: 1.65;
+  }
+
+  .gp-author-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .gp-author {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: #fffdf7;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .gp-author:hover {
+    color: #e6c229;
+  }
+
+  .gp-author img {
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 9999px;
+    object-fit: cover;
+    border: 1px solid rgba(255, 253, 247, 0.18);
+  }
+
+  .gp-post-image-wrap {
+    overflow: hidden;
+    margin-top: 2.25rem;
+    border-radius: 1.25rem;
+    border: 1px solid rgba(255, 253, 247, 0.12);
+    background: #181821;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
+  }
+
+  .gp-post-image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  .gp-post-body-section {
+    padding: 2rem 0 4rem;
+  }
+
+  .gp-post-content-shell {
+    width: min(50rem, calc(100vw - 3rem));
+    margin-inline: auto;
+  }
+
+  .gp-post-content {
+    color: #d8d3e3;
+    font-size: 1.08rem;
+    line-height: 1.85;
+  }
+
+  .gp-post-content :global(*) {
+    max-width: 100%;
+  }
+
+  .gp-post-content :global(p) {
+    margin: 1.25rem 0;
+    color: #d8d3e3;
+    font-weight: 400;
+  }
+
+  .gp-post-content :global(h2) {
+    margin: 2.8rem 0 1rem;
+    color: #fffdf7;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -0.045em;
+  }
+
+  .gp-post-content :global(h3) {
+    margin: 2.2rem 0 0.8rem;
+    color: #fffdf7;
+    font-size: clamp(1.45rem, 3vw, 2.2rem);
+    line-height: 1.08;
+    font-weight: 750;
+    letter-spacing: -0.035em;
+  }
+
+  .gp-post-content :global(h4) {
+    margin: 1.8rem 0 0.65rem;
+    color: #fffdf7;
+    font-size: 1.25rem;
+    font-weight: 750;
+  }
+
+  .gp-post-content :global(a) {
+    color: #e6c229;
+    text-decoration: underline;
+    text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.18em;
+  }
+
+  .gp-post-content :global(a:hover) {
+    color: #f17105;
+  }
+
+  .gp-post-content :global(strong) {
+    color: #fffdf7;
+    font-weight: 700;
+  }
+
+  .gp-post-content :global(em) {
+    color: #fffdf7;
+  }
+
+  .gp-post-content :global(blockquote) {
+    margin: 2rem 0;
+    border-left: 4px solid #d11149;
+    border-radius: 0.85rem;
+    background: #181821;
+    padding: 1.25rem 1.4rem;
+    color: #fffdf7;
+    font-size: 1.15rem;
+    line-height: 1.65;
+  }
+
+  .gp-post-content :global(ul),
+  .gp-post-content :global(ol) {
+    margin: 1.25rem 0;
+    padding-left: 1.4rem;
+    color: #d8d3e3;
+  }
+
+  .gp-post-content :global(li) {
+    margin: 0.45rem 0;
+  }
+
+  .gp-post-content :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 2rem 0;
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 253, 247, 0.12);
+  }
+
+  .gp-post-content :global(hr) {
+    margin: 2.5rem 0;
+    border: 0;
+    border-top: 1px solid rgba(255, 253, 247, 0.14);
+  }
+
+  .gp-post-content :global(code) {
+    border-radius: 0.35rem;
+    background: #181821;
+    padding: 0.18rem 0.35rem;
+    color: #e6c229;
+    font-size: 0.9em;
+  }
+
+  .gp-review-score-card {
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 1fr);
+    margin: 3.5rem 0 0;
+    overflow: hidden;
+    border-radius: 1.35rem;
+    border: 1px solid rgba(255, 253, 247, 0.14);
+    background:
+      linear-gradient(135deg, rgba(241, 113, 5, 0.08), transparent 46%),
+      #181821;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+    transition:
+      transform 0.35s ease,
+      border-color 0.35s ease,
+      box-shadow 0.35s ease;
+  }
+
+  .gp-review-score-card:hover {
+    transform: translateY(-0.35rem);
+    border-color: rgba(241, 113, 5, 0.72);
+    box-shadow:
+      0 32px 80px rgba(0, 0, 0, 0.36),
+      0 0 0 1px rgba(241, 113, 5, 0.28);
+  }
+
+  .gp-score-main {
+    display: flex;
+    min-height: 15rem;
+    flex-direction: column;
+    justify-content: center;
+    background:
+      radial-gradient(circle at 25% 15%, rgba(230, 194, 41, 0.22), transparent 8rem),
+      linear-gradient(135deg, #f17105 0%, #d85f00 100%);
+    padding: 1.55rem;
+    color: #fffdf7;
+  }
+
+  .gp-score-main p {
+    margin: 0;
+    color: rgba(255, 253, 247, 0.88);
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.13em;
+  }
+
+  .gp-score-number {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.38rem;
+    margin-top: 0.85rem;
+  }
+
+  .gp-score-number strong {
+    display: block;
+    color: #fffdf7;
+    font-size: clamp(3.4rem, 6vw, 4.8rem);
+    line-height: 0.9;
+    font-weight: 750;
+    letter-spacing: -0.055em;
+  }
+
+  .gp-score-number span {
+    margin-bottom: 0.35rem;
+    color: rgba(255, 253, 247, 0.82);
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .gp-score-label {
+    display: block;
+    margin-top: 0.9rem;
+    color: rgba(255, 253, 247, 0.88);
+    font-size: 0.92rem;
+    font-weight: 500;
+    line-height: 1.45;
+  }
+
+  .gp-score-details {
+    display: grid;
+    align-content: center;
+    gap: 0;
+    padding: 1.6rem 1.8rem;
+  }
+
+  .gp-score-details div {
+    border-bottom: 1px solid rgba(255, 253, 247, 0.1);
+    padding: 0.9rem 0;
+  }
+
+  .gp-score-details div:first-child {
+    padding-top: 0;
+  }
+
+  .gp-score-details div:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .gp-score-details p {
+    margin: 0 0 0.35rem;
+    color: #e6c229;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.13em;
+  }
+
+  .gp-score-details strong {
+    display: block;
+    color: #fffdf7;
+    font-size: 0.98rem;
+    line-height: 1.55;
+    font-weight: 500;
+  }
+
+  .gp-post-footer {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 3rem;
+    border-top: 1px solid rgba(255, 253, 247, 0.12);
+    padding-top: 1.5rem;
+  }
+
+  .gp-tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .gp-tag-list a {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px;
+    background: #181821;
+    border: 1px solid rgba(255, 253, 247, 0.12);
+    padding: 0.55rem 0.85rem;
+    color: #fffdf7;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .gp-tag-list a:hover {
+    border-color: #e6c229;
+    color: #e6c229;
+  }
+
+  .gp-share-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .gp-share-wrap p {
+    margin: 0;
+    color: #b8b1c7;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .gp-similar-section {
+    background: #0f0f17;
+    padding: 1rem 0 5rem;
+  }
+
+  .gp-similar-heading {
+    margin-bottom: 1.5rem;
+  }
+
+  .gp-similar-heading p {
+    margin: 0 0 0.4rem;
+    color: #d11149;
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+  }
+
+  .gp-similar-heading h2 {
+    margin: 0;
+    color: #fffdf7;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -0.045em;
+  }
+
+  @media (max-width: 768px) {
+    .gp-post-shell,
+    .gp-post-content-shell {
+      width: min(100% - 2rem, 70rem);
+    }
+
+    .gp-post-hero {
+      padding-top: 3rem;
+    }
+
+    .gp-share-wrap {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .gp-review-score-card {
+      grid-template-columns: 1fr;
+    }
+
+    .gp-score-main {
+      min-height: auto;
+    }
+  }
+</style>

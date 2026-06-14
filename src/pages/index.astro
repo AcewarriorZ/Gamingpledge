@@ -1,0 +1,1163 @@
+---
+import Base from "@/layouts/Base.astro";
+import { getSinglePage } from "@/lib/contentParser.astro";
+import { sortByDate } from "@/lib/utils/sortFunctions";
+
+const posts = await getSinglePage("posts");
+const sortedPosts = sortByDate(posts);
+
+const getPostData = (post: any) => {
+  return post?.frontmatter || post?.data || {};
+};
+
+const usablePosts = sortedPosts.filter((post: any) => {
+  const data = getPostData(post);
+  return data.title && data.draft !== true;
+});
+
+const heroPost = usablePosts[0];
+const sidePosts = usablePosts.slice(1, 4);
+const reviewPosts = usablePosts.slice(0, 2);
+const retroPosts = usablePosts.slice(2, 4);
+const featureFeedPosts = usablePosts.slice(0, 2);
+
+const featuredSections = [
+  {
+    title: "Reviews",
+    subtitle: "The Critic",
+    description:
+      "Honest game reviews focused on feel, design and whether a game actually earns your time.",
+    href: "/reviews",
+    tag: "Judgement Path",
+    stat: "Critical Eye",
+    level: "LV.01",
+    theme: "reviews",
+  },
+  {
+    title: "Retro",
+    subtitle: "The Archivist",
+    description:
+      "PS2-era classics, forgotten gems and older games that still have something worth saying.",
+    href: "/retro",
+    tag: "Memory Path",
+    stat: "Nostalgia Resist",
+    level: "LV.02",
+    theme: "retro",
+  },
+  {
+    title: "Features",
+    subtitle: "The Scholar",
+    description:
+      "Longer reads, deeper analysis and thoughtful pieces on games, genres, design and culture.",
+    href: "/features",
+    tag: "Lore Path",
+    stat: "Deep Dive",
+    level: "LV.03",
+    theme: "features",
+  },
+  {
+    title: "Lists",
+    subtitle: "The Cartographer",
+    description:
+      "Rankings, recommendations and curated picks to help you discover what to play next.",
+    href: "/lists",
+    tag: "Discovery Path",
+    stat: "Map Sense",
+    level: "LV.04",
+    theme: "lists",
+  },
+];
+
+const getPostUrl = (post: any) => {
+  const slug = post.slug || post.id || "";
+
+  if (slug.startsWith("blog/")) {
+    return `/${slug}`;
+  }
+
+  return `/blog/${slug}`;
+};
+
+const getPostImage = (post: any) => {
+  const data = getPostData(post);
+  const image = data.image;
+
+  if (typeof image === "string") {
+    return image;
+  }
+
+  if (image?.src) {
+    return image.src;
+  }
+
+  return "/images/image-placeholder.png";
+};
+
+const getPostTitle = (post: any) => {
+  const data = getPostData(post);
+  return data.title || "Untitled post";
+};
+
+const getPostDescription = (post: any) => {
+  const data = getPostData(post);
+  return data.description || data.excerpt || "";
+};
+
+const getPostDate = (post: any) => {
+  const data = getPostData(post);
+  return data.date || data.publishDate || new Date().toISOString();
+};
+
+const getPostCategories = (post: any) => {
+  const data = getPostData(post);
+  const categories = data.categories || [];
+
+  if (Array.isArray(categories)) {
+    return categories;
+  }
+
+  return [categories];
+};
+
+const formatDate = (date: string) => {
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  }).format(new Date(date));
+};
+---
+
+<Base>
+  <main class="gp-home">
+    <section class="gp-hero-section">
+      <div class="gp-shell">
+        <div class="gp-hero-intro">
+          <div>
+            <p class="gp-kicker">GamingPledge</p>
+
+            <h1>Gems from every era.</h1>
+          </div>
+
+          <p>
+            Retro reviews, deep dives and forgotten classics for players who still
+            care about the games behind the hype.
+          </p>
+        </div>
+
+        {
+          heroPost ? (
+            <div class="gp-featured-grid">
+              <a href={getPostUrl(heroPost)} class="gp-main-story">
+                <div class="gp-main-image-wrap">
+                  <img
+                    src={getPostImage(heroPost)}
+                    alt={getPostTitle(heroPost)}
+                    class="gp-main-image"
+                  />
+
+                  <span class="gp-image-badge">Featured Review</span>
+                </div>
+
+                <div class="gp-main-copy">
+                  <p class="gp-post-meta">
+                    {formatDate(getPostDate(heroPost))}
+                    {getPostCategories(heroPost).length > 0 && (
+                      <> • {getPostCategories(heroPost).join(", ")}</>
+                    )}
+                  </p>
+
+                  <h2>{getPostTitle(heroPost)}</h2>
+
+                  <p>{getPostDescription(heroPost)}</p>
+                </div>
+              </a>
+
+              <aside class="gp-side-panel">
+                <div class="gp-side-heading">
+                  <h2>Latest Picks</h2>
+                  <a href="/blog">View all →</a>
+                </div>
+
+                {sidePosts.length > 0 ? (
+                  <div class="gp-side-list">
+                    {sidePosts.map((post: any) => (
+                      <a href={getPostUrl(post)} class="gp-side-story">
+                        <div>
+                          <h3>{getPostTitle(post)}</h3>
+
+                          <p>
+                            {formatDate(getPostDate(post))}
+                            {getPostCategories(post).length > 0 && (
+                              <> • {getPostCategories(post).slice(0, 2).join(", ")}</>
+                            )}
+                          </p>
+                        </div>
+
+                        <img
+                          src={getPostImage(post)}
+                          alt={getPostTitle(post)}
+                          class="gp-side-image"
+                        />
+                      </a>
+                    ))}
+                  </div>
+                ) : (
+                  <div class="gp-empty-card">
+                    <p>More picks coming soon.</p>
+                    <span>Add more posts to fill this section.</span>
+                  </div>
+                )}
+              </aside>
+            </div>
+          ) : (
+            <div class="gp-empty-card">
+              <p>No posts yet.</p>
+              <span>Add your first post inside src/content/posts.</span>
+            </div>
+          )
+        }
+      </div>
+    </section>
+
+    <section class="gp-path-section">
+      <div class="gp-shell">
+        <div class="gp-path-heading">
+          <div>
+            <p class="gp-kicker">Start Here</p>
+
+            <h2>Choose your path</h2>
+          </div>
+
+          <p>
+            Pick your route through GamingPledge. Reviews, retro rediscoveries,
+            deep dives and curated lists each unlock a different corner of the archive.
+          </p>
+        </div>
+
+        <div class="gp-path-grid">
+          {
+            featuredSections.map((item) => (
+              <a
+                href={item.href}
+                class={`gp-path-card gp-path-card--${item.theme}`}
+              >
+                <div class="gp-path-card-bg"></div>
+                <div class="gp-path-corner gp-path-corner-tl"></div>
+                <div class="gp-path-corner gp-path-corner-br"></div>
+
+                <div class="gp-path-top">
+                  <div class="gp-path-level">
+                    <span>{item.level}</span>
+                  </div>
+
+                  <div class="gp-path-tag">{item.tag}</div>
+                </div>
+
+                <div class="gp-path-copy">
+                  <p class="gp-path-subtitle">{item.subtitle}</p>
+
+                  <h3>{item.title}</h3>
+
+                  <p>{item.description}</p>
+                </div>
+
+                <div class="gp-path-stat">
+                  <span>{item.stat}</span>
+
+                  <div class="gp-path-meter" aria-hidden="true">
+                    <span></span>
+                  </div>
+                </div>
+
+                <div class="gp-path-bottom">
+                  <span>
+                    Enter path
+                    <span aria-hidden="true">→</span>
+                  </span>
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="gp-magazine-section">
+      <div class="gp-shell">
+        <div class="gp-magazine-top-grid">
+          <div>
+            <div class="gp-magazine-heading-row">
+              <h2>Reviews</h2>
+              <a href="/reviews">View all</a>
+            </div>
+
+            <div class="gp-mini-grid">
+              {reviewPosts.map((post: any) => (
+                <a href={getPostUrl(post)} class="gp-mini-card">
+                  <img
+                    src={getPostImage(post)}
+                    alt={getPostTitle(post)}
+                    class="gp-mini-image"
+                  />
+
+                  <h3>{getPostTitle(post)}</h3>
+
+                  <p>{formatDate(getPostDate(post))}</p>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <div class="gp-magazine-heading-row">
+              <h2>Retro Picks</h2>
+              <a href="/retro">View all</a>
+            </div>
+
+            <div class="gp-mini-grid">
+              {retroPosts.map((post: any) => (
+                <a href={getPostUrl(post)} class="gp-mini-card">
+                  <img
+                    src={getPostImage(post)}
+                    alt={getPostTitle(post)}
+                    class="gp-mini-image"
+                  />
+
+                  <h3>{getPostTitle(post)}</h3>
+
+                  <p>{formatDate(getPostDate(post))}</p>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div class="gp-magazine-bottom-grid">
+          <div class="gp-feature-feed">
+            {featureFeedPosts.map((post: any) => (
+              <a href={getPostUrl(post)} class="gp-feature-row">
+                <img
+                  src={getPostImage(post)}
+                  alt={getPostTitle(post)}
+                  class="gp-feature-image"
+                />
+
+                <div>
+                  <p class="gp-feature-kicker">
+                    {getPostCategories(post).slice(0, 2).join(" › ") ||
+                      "GamingPledge"}
+                  </p>
+
+                  <h3>{getPostTitle(post)}</h3>
+
+                  <p class="gp-feature-description">
+                    {getPostDescription(post)}
+                  </p>
+
+                  <p class="gp-feature-meta">
+                    Published {formatDate(getPostDate(post))}
+                  </p>
+                </div>
+              </a>
+            ))}
+          </div>
+
+          <aside class="gp-newsletter-card">
+            <p class="gp-newsletter-icon">🕹️</p>
+
+            <h2>Level up your inbox</h2>
+
+            <div class="gp-newsletter-box">
+              <p>
+                Don’t miss the latest reviews, retro discoveries and gaming deep dives.
+                Sign up for future GamingPledge updates.
+              </p>
+
+              <form>
+                <input
+                  type="email"
+                  placeholder="Enter email here"
+                  aria-label="Email address"
+                />
+
+                <button type="submit">
+                  Sign me up
+                </button>
+              </form>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+</Base>
+
+<style>
+  :global(body) {
+    background: #0f0f17;
+  }
+
+  .gp-home {
+    background: #0f0f17;
+    color: #fffdf7;
+  }
+
+  .gp-shell {
+    width: min(70rem, calc(100vw - 3rem));
+    margin-inline: auto;
+  }
+
+  .gp-hero-section,
+  .gp-path-section,
+  .gp-magazine-section {
+    background: #0f0f17;
+  }
+
+  .gp-hero-section {
+    padding: 4rem 0 3.5rem;
+  }
+
+  .gp-path-section {
+    padding: 3.5rem 0 4rem;
+  }
+
+  .gp-magazine-section {
+    padding: 4rem 0 5rem;
+  }
+
+  .gp-kicker {
+    margin: 0 0 0.75rem;
+    color: #d11149;
+    font-size: 0.78rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+  }
+
+  .gp-hero-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(18rem, 0.65fr);
+    gap: 2.5rem;
+    align-items: end;
+    margin-bottom: 2rem;
+  }
+
+  .gp-hero-intro h1 {
+    margin: 0;
+    max-width: 42rem;
+    color: #fffdf7;
+    font-size: clamp(3.2rem, 7vw, 6.5rem);
+    line-height: 0.92;
+    font-weight: 900;
+    letter-spacing: -0.07em;
+  }
+
+  .gp-hero-intro > p {
+    margin: 0;
+    color: #b8b1c7;
+    font-size: 1.05rem;
+    line-height: 1.65;
+  }
+
+  .gp-featured-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(20rem, 0.75fr);
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  .gp-main-story,
+  .gp-side-story,
+  .gp-path-card,
+  .gp-mini-card,
+  .gp-feature-row {
+    text-decoration: none;
+  }
+
+  .gp-main-image-wrap {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1.2rem;
+    border: 1px solid rgba(255, 253, 247, 0.12);
+    background: #181821;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+  }
+
+  .gp-main-image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    transition:
+      transform 0.45s ease,
+      filter 0.45s ease;
+  }
+
+  .gp-main-story:hover .gp-main-image {
+    transform: scale(1.035);
+    filter: saturate(1.1) contrast(1.05);
+  }
+
+  .gp-image-badge {
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+    border-radius: 9999px;
+    background: #d11149;
+    padding: 0.55rem 0.9rem;
+    color: #fffdf7;
+    font-size: 0.72rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .gp-main-copy {
+    margin-top: 1.4rem;
+  }
+
+  .gp-post-meta {
+    margin: 0 0 0.75rem;
+    color: #b8b1c7;
+    font-size: 0.76rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .gp-main-copy h2 {
+    margin: 0;
+    color: #fffdf7;
+    font-size: clamp(1.9rem, 3vw, 2.7rem);
+    line-height: 1.05;
+    font-weight: 900;
+    letter-spacing: -0.055em;
+    transition: color 0.2s ease;
+  }
+
+  .gp-main-story:hover h2 {
+    color: #e6c229;
+  }
+
+  .gp-main-copy > p:last-child {
+    margin-top: 0.85rem;
+    color: #b8b1c7;
+    line-height: 1.65;
+  }
+
+  .gp-side-panel {
+    border-left: 1px solid rgba(255, 253, 247, 0.12);
+    padding-left: 2.5rem;
+  }
+
+  .gp-side-heading,
+  .gp-magazine-heading-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .gp-side-heading {
+    margin-bottom: 1rem;
+  }
+
+  .gp-side-heading h2,
+  .gp-magazine-heading-row h2 {
+    margin: 0;
+    color: #d11149;
+    font-size: clamp(1.4rem, 2vw, 2rem);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+  }
+
+  .gp-side-heading a,
+  .gp-magazine-heading-row a {
+    color: #fffdf7;
+    font-size: 0.9rem;
+    font-weight: 900;
+  }
+
+  .gp-side-heading a:hover,
+  .gp-magazine-heading-row a:hover {
+    color: #e6c229;
+  }
+
+  .gp-side-list {
+    display: grid;
+  }
+
+  .gp-side-story {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 7.2rem;
+    gap: 1rem;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 253, 247, 0.12);
+    padding: 1.2rem 0;
+  }
+
+  .gp-side-story:first-child {
+    padding-top: 0;
+  }
+
+  .gp-side-story h3 {
+    margin: 0;
+    color: #fffdf7;
+    font-size: 1rem;
+    line-height: 1.25;
+    font-weight: 900;
+    letter-spacing: -0.035em;
+    transition: color 0.2s ease;
+  }
+
+  .gp-side-story:hover h3 {
+    color: #e6c229;
+  }
+
+  .gp-side-story p {
+    margin: 0.45rem 0 0;
+    color: #b8b1c7;
+    font-size: 0.7rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .gp-side-image {
+    width: 7.2rem;
+    height: 4.5rem;
+    border-radius: 0.75rem;
+    object-fit: cover;
+  }
+
+  .gp-empty-card {
+    border: 1px solid rgba(255, 253, 247, 0.12);
+    border-radius: 1rem;
+    background: #181821;
+    padding: 1.5rem;
+  }
+
+  .gp-empty-card p {
+    margin: 0;
+    color: #fffdf7;
+    font-weight: 900;
+  }
+
+  .gp-empty-card span {
+    display: block;
+    margin-top: 0.4rem;
+    color: #b8b1c7;
+  }
+
+  .gp-path-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(18rem, 1.2fr);
+    gap: 2.5rem;
+    align-items: end;
+    margin-bottom: 2rem;
+  }
+
+  .gp-path-heading h2 {
+    margin: 0;
+    color: #fffdf7;
+    font-size: clamp(2.4rem, 4vw, 4rem);
+    line-height: 0.98;
+    font-weight: 900;
+    letter-spacing: -0.06em;
+  }
+
+  .gp-path-heading > p {
+    margin: 0;
+    justify-self: end;
+    max-width: 43rem;
+    color: #b8b1c7;
+    text-align: right;
+    font-size: 1.05rem;
+    line-height: 1.65;
+  }
+
+  .gp-path-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .gp-path-card {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    min-height: 24rem;
+    border-radius: 1.4rem;
+    border: 1px solid rgba(255, 253, 247, 0.12);
+    background: #181821;
+    padding: 1.4rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    transition:
+      transform 0.35s ease,
+      border-color 0.35s ease,
+      box-shadow 0.35s ease;
+  }
+
+  .gp-path-card:hover {
+    transform: translateY(-0.45rem);
+    border-color: var(--path-accent);
+    box-shadow:
+      0 30px 70px rgba(0, 0, 0, 0.34),
+      0 0 0 1px var(--path-accent);
+  }
+
+  .gp-path-card-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    opacity: 0.65;
+  }
+
+  .gp-path-corner {
+    position: absolute;
+    width: 1.8rem;
+    height: 1.8rem;
+    opacity: 0.35;
+  }
+
+  .gp-path-corner-tl {
+    top: 1rem;
+    left: 1rem;
+    border-top: 2px solid var(--path-accent);
+    border-left: 2px solid var(--path-accent);
+  }
+
+  .gp-path-corner-br {
+    right: 1rem;
+    bottom: 1rem;
+    border-right: 2px solid var(--path-accent);
+    border-bottom: 2px solid var(--path-accent);
+  }
+
+  .gp-path-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .gp-path-level {
+    display: inline-flex;
+    width: 3.4rem;
+    height: 3.4rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 253, 247, 0.12);
+    background: rgba(255, 253, 247, 0.06);
+    color: var(--path-accent);
+    font-size: 0.78rem;
+    font-weight: 900;
+  }
+
+  .gp-path-tag {
+    border-radius: 9999px;
+    background: rgba(255, 253, 247, 0.08);
+    padding: 0.5rem 0.72rem;
+    color: #b8b1c7;
+    font-size: 0.66rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+  }
+
+  .gp-path-copy {
+    margin-top: 1.8rem;
+  }
+
+  .gp-path-subtitle {
+    margin: 0 0 0.55rem;
+    color: var(--path-accent);
+    font-size: 0.74rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+  }
+
+  .gp-path-copy h3 {
+    margin: 0;
+    color: #fffdf7;
+    font-size: clamp(2rem, 2.4vw, 2.5rem);
+    line-height: 0.95;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+  }
+
+  .gp-path-copy > p:last-child {
+    margin-top: 1rem;
+    color: #b8b1c7;
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .gp-path-stat {
+    margin-top: 1.7rem;
+  }
+
+  .gp-path-stat > span {
+    display: block;
+    margin-bottom: 0.65rem;
+    color: #fffdf7;
+    font-size: 0.72rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+  }
+
+  .gp-path-meter {
+    height: 0.55rem;
+    overflow: hidden;
+    border-radius: 9999px;
+    background: rgba(255, 253, 247, 0.1);
+  }
+
+  .gp-path-meter span {
+    display: block;
+    width: 42%;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--path-accent);
+    transition: width 0.35s ease;
+  }
+
+  .gp-path-card:hover .gp-path-meter span {
+    width: 78%;
+  }
+
+  .gp-path-bottom {
+    margin-top: 1.4rem;
+  }
+
+  .gp-path-bottom span {
+    color: #fffdf7;
+    font-weight: 900;
+  }
+
+  .gp-path-card--reviews {
+    --path-accent: #d11149;
+  }
+
+  .gp-path-card--reviews .gp-path-card-bg {
+    background:
+      linear-gradient(135deg, rgba(209, 17, 73, 0.16), transparent 44%),
+      radial-gradient(circle at 20% 100%, rgba(209, 17, 73, 0.22), transparent 14rem);
+  }
+
+  .gp-path-card--retro {
+    --path-accent: #f17105;
+  }
+
+  .gp-path-card--retro .gp-path-card-bg {
+    background:
+      linear-gradient(135deg, rgba(241, 113, 5, 0.16), transparent 44%),
+      radial-gradient(circle at 20% 100%, rgba(241, 113, 5, 0.22), transparent 14rem);
+  }
+
+  .gp-path-card--features {
+    --path-accent: #6610f2;
+  }
+
+  .gp-path-card--features .gp-path-card-bg {
+    background:
+      linear-gradient(135deg, rgba(102, 16, 242, 0.16), transparent 44%),
+      radial-gradient(circle at 20% 100%, rgba(102, 16, 242, 0.22), transparent 14rem);
+  }
+
+  .gp-path-card--lists {
+    --path-accent: #e6c229;
+  }
+
+  .gp-path-card--lists .gp-path-card-bg {
+    background:
+      linear-gradient(135deg, rgba(230, 194, 41, 0.14), transparent 44%),
+      radial-gradient(circle at 20% 100%, rgba(230, 194, 41, 0.18), transparent 14rem);
+  }
+
+  .gp-magazine-top-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.8rem;
+  }
+
+  .gp-magazine-heading-row {
+    margin-bottom: 1.35rem;
+  }
+
+  .gp-mini-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.35rem;
+  }
+
+  .gp-mini-image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 0.85rem;
+  }
+
+  .gp-mini-card h3 {
+    margin: 0.8rem 0 0;
+    color: #fffdf7;
+    font-size: 1.12rem;
+    line-height: 1.25;
+    font-weight: 900;
+    letter-spacing: -0.035em;
+  }
+
+  .gp-mini-card:hover h3 {
+    color: #e6c229;
+  }
+
+  .gp-mini-card p {
+    margin: 0.55rem 0 0;
+    color: #b8b1c7;
+    font-size: 0.78rem;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+
+  .gp-magazine-bottom-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(20rem, 0.65fr);
+    gap: 3rem;
+    margin-top: 3.5rem;
+    align-items: start;
+  }
+
+  .gp-feature-row {
+    display: grid;
+    grid-template-columns: 18rem 1fr;
+    gap: 1.6rem;
+    padding: 2rem 0;
+    border-top: 1px solid rgba(255, 253, 247, 0.14);
+  }
+
+  .gp-feature-row:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .gp-feature-image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 0.9rem;
+  }
+
+  .gp-feature-kicker {
+    margin: 0 0 0.65rem;
+    color: #d11149;
+    font-size: 0.78rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .gp-feature-row h3 {
+    margin: 0;
+    color: #fffdf7;
+    font-size: clamp(1.45rem, 2vw, 2rem);
+    line-height: 1.12;
+    font-weight: 900;
+    letter-spacing: -0.045em;
+  }
+
+  .gp-feature-row:hover h3 {
+    color: #e6c229;
+  }
+
+  .gp-feature-description {
+    margin-top: 0.75rem;
+    color: #b8b1c7;
+    line-height: 1.65;
+  }
+
+  .gp-feature-meta {
+    margin-top: 1rem;
+    color: rgba(255, 253, 247, 0.62);
+    font-size: 0.86rem;
+    font-weight: 800;
+  }
+
+  .gp-newsletter-card {
+    position: sticky;
+    top: 2rem;
+  }
+
+  .gp-newsletter-icon {
+    margin: 0 0 0.65rem;
+    font-size: 1.75rem;
+  }
+
+  .gp-newsletter-card h2 {
+    margin: 0;
+    color: #fffdf7;
+    font-size: clamp(1.7rem, 2vw, 2.25rem);
+    font-weight: 900;
+  }
+
+  .gp-newsletter-box {
+    margin-top: 1.5rem;
+    border-radius: 1.2rem;
+    background: rgba(255, 253, 247, 0.08);
+    padding: 1.6rem;
+  }
+
+  .gp-newsletter-box p {
+    color: rgba(255, 253, 247, 0.82);
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.55;
+  }
+
+  .gp-newsletter-box form {
+    margin-top: 1.4rem;
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .gp-newsletter-box input {
+    width: 100%;
+    border: 0;
+    border-radius: 0.6rem;
+    background: #fffdf7;
+    padding: 0.9rem 1rem;
+    color: #0f0f17;
+    font-weight: 700;
+    outline: none;
+  }
+
+  .gp-newsletter-box button {
+    width: fit-content;
+    border: 0;
+    border-radius: 0.6rem;
+    background: #d11149;
+    padding: 0.85rem 1.25rem;
+    color: #fffdf7;
+    font-weight: 900;
+    cursor: pointer;
+  }
+
+  .gp-newsletter-box button:hover {
+    background: #f17105;
+  }
+
+  @media (max-width: 1200px) {
+    .gp-path-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 1100px) {
+    .gp-magazine-top-grid,
+    .gp-magazine-bottom-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .gp-newsletter-card {
+      position: static;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .gp-hero-intro,
+    .gp-featured-grid,
+    .gp-path-heading {
+      grid-template-columns: 1fr;
+    }
+
+    .gp-path-heading > p {
+      justify-self: start;
+      text-align: left;
+    }
+
+    .gp-side-panel {
+      border-left: 0;
+      border-top: 1px solid rgba(255, 253, 247, 0.12);
+      padding-left: 0;
+      padding-top: 2rem;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .gp-mini-grid,
+    .gp-feature-row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .gp-shell {
+      width: min(100% - 2rem, 70rem);
+    }
+
+    .gp-path-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .gp-path-card {
+      min-height: auto;
+    }
+
+    .gp-side-story {
+      grid-template-columns: 1fr;
+    }
+
+    .gp-side-image {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+    }
+  }
+  /* Softer homepage typography */
+.gp-hero-intro h1,
+.gp-path-heading h2 {
+  font-weight: 800;
+  letter-spacing: -0.05em;
+}
+
+.gp-main-copy h2,
+.gp-magazine-heading-row h2,
+.gp-newsletter-card h2 {
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.gp-path-copy h3,
+.gp-feature-row h3 {
+  font-weight: 750;
+  letter-spacing: -0.035em;
+}
+
+.gp-side-story h3,
+.gp-mini-card h3 {
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.gp-kicker,
+.gp-post-meta,
+.gp-meta,
+.gp-path-subtitle,
+.gp-path-stat > span {
+  font-weight: 700;
+}
+
+.gp-hero-intro > p,
+.gp-main-copy > p:last-child,
+.gp-path-heading > p,
+.gp-path-copy > p:last-child,
+.gp-feature-description,
+.gp-newsletter-box p {
+  font-weight: 400;
+}
+</style>
