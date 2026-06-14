@@ -39,7 +39,7 @@ const sidePosts = usablePosts.slice(1, 4);
 
 const reviewPosts = getPostsByCategory("Reviews").slice(0, 2);
 const retroPosts = getPostsByCategory("Retro").slice(0, 2);
-const featureFeedPosts = getPostsByCategory("Features").slice(0, 2);
+const featureFeedPosts = getPostsByCategory("Reviews").slice(0, 3);
 
 const featuredSections = [
   {
@@ -368,10 +368,9 @@ const formatDate = (date: string) => {
                   />
 
                   <div>
-                    <p class="gp-feature-kicker">
-                      {getPostCategories(post).slice(0, 2).join(" › ") ||
-                        "GamingPledge"}
-                    </p>
+                   <p class="gp-feature-kicker">
+  Latest Review
+</p>
 
                     <h3>{getPostTitle(post)}</h3>
 
@@ -1055,17 +1054,27 @@ const formatDate = (date: string) => {
     gap: 0.8rem;
   }
 
-  .gp-newsletter-box input {
-    width: 100%;
-    border: 0;
-    border-radius: 0.6rem;
-    background: #fffdf7;
-    padding: 0.9rem 1rem;
-    color: #0f0f17;
-    font-weight: 700;
-    outline: none;
-  }
+  .gp-newsletter-box input,
+.gp-newsletter-box input[type="email"] {
+  width: 100%;
+  border: 1px solid rgba(15, 15, 23, 0.12);
+  border-radius: 0.6rem;
+  background: #fffdf7 !important;
+  padding: 0.9rem 1rem;
+  color: #0f0f17 !important;
+  caret-color: #0f0f17;
+  font-weight: 700;
+  outline: none;
+}
 
+.gp-newsletter-box input::placeholder {
+  color: rgba(15, 15, 23, 0.52) !important;
+}
+
+.gp-newsletter-box input:focus {
+  border-color: #f17105;
+  box-shadow: 0 0 0 3px rgba(241, 113, 5, 0.22);
+}
   .gp-newsletter-box button {
     width: fit-content;
     border: 0;
