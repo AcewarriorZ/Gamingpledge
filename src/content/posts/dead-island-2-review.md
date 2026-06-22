@@ -20,7 +20,11 @@ tags:
   - "PC Gaming"
 draft: false
 score: "72"
-scoreLabel: "Good"
+scoreLabel: "Fun for a campaign run, less compelling once the credits roll."
+verdict: "A messy, entertaining zombie holiday with brilliant gore and too much “that will do” design."
+bestFor: "Weekend co-op chaos, crunchy melee combat and anyone who thinks zombie games are better when limbs fly everywhere."
+strongestPoint: "HELL-A looks great, and the gore tech is the star of the show. Melee is also fantastic"
+weakestPoint: "A colourful and occasionally funny story, but rarely memorable."
 slug: "dead-island-2-review"
 ---
 ---
