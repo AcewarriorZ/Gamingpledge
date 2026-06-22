@@ -1,43 +1,28 @@
 ---
 title: "Dead Island 2 Review: A Gloriously Gory Holiday in HELL-A"
+meta_title: "Dead Island 2 Review: Is HELL-A Worth Visiting?"
 description: "Dead Island 2 delivers brilliant gore, crunchy melee combat and chaotic co-op, but weak progression, uneven pacing and a flat story hold it back."
-excerpt: "Dead Island 2 is a gore-drenched trip through HELL-A where melee feels brutal and zombies burst satisfyingly. Then the cracks show: mad respawns, spongey foes, flat story, and a loot loop that never fully hooks. Fun, but only just."
-pubDate: 2026-06-22
-updatedDate: 2026-06-22
+date: "2026-06-22T00:00:00.000Z"
+image: "/images/posts/dead-island-2-review.webp"
 author: "Kieren Shepherd"
-category: "Reviews"
+categories:
+  - "Reviews"
 tags:
-
-* "Dead Island 2"
-* "Dead Island"
-* "Zombie Games"
-* "Action RPG"
-* "Co-op Games"
-* "Dambuster Studios"
-* "Deep Silver"
-* "PS5"
-* "Xbox Series X"
-* "PC Gaming"
-  platforms:
-* "PlayStation 5"
-* "PlayStation 4"
-* "Xbox Series X/S"
-* "Xbox One"
-* "PC"
-  developer: "Dambuster Studios"
-  publisher: "Deep Silver"
-  genre: "First-person action RPG"
-  score: 72
-  scoreLabel: "Good"
-  slug: "dead-island-2-review"
-  featuredImage: "/images/reviews/dead-island-2-review.webp"
-  featuredImageAlt: "Dead Island 2 review artwork showing zombie chaos in HELL-A"
-  seoTitle: "Dead Island 2 Review: Is HELL-A Worth Visiting?"
-  seoDescription: "Our Dead Island 2 review covers combat, gore, co-op, story, exploration, progression and whether this zombie sequel is worth playing today."
-
+  - "Dead Island 2"
+  - "Dead Island"
+  - "Zombie Games"
+  - "Action RPG"
+  - "Co-op Games"
+  - "Dambuster Studios"
+  - "Deep Silver"
+  - "PS5"
+  - "Xbox Series X"
+  - "PC Gaming"
+draft: false
+score: "72"
+scoreLabel: "Good"
+slug: "dead-island-2-review"
 ---
-
-
 ---
 
 # Dead Island 2 Review: A Gloriously Gory Holiday in HELL-A
