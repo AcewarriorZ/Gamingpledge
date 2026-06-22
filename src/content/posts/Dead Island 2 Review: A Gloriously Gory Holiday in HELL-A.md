@@ -1,5 +1,4 @@
 ---
-
 title: "Dead Island 2 Review: A Gloriously Gory Holiday in HELL-A"
 description: "Dead Island 2 delivers brilliant gore, crunchy melee combat and chaotic co-op, but weak progression, uneven pacing and a flat story hold it back."
 excerpt: "Dead Island 2 is a gore-drenched trip through HELL-A where melee feels brutal and zombies burst satisfyingly. Then the cracks show: mad respawns, spongey foes, flat story, and a loot loop that never fully hooks. Fun, but only just."
@@ -9,22 +8,22 @@ author: "Kieren Shepherd"
 category: "Reviews"
 tags:
 
-* Dead Island 2
-* Dead Island
-* Zombie Games
-* Action RPG
-* Co-op Games
-* Dambuster Studios
-* Deep Silver
-* PS5
-* Xbox Series X
-* PC Gaming
+* "Dead Island 2"
+* "Dead Island"
+* "Zombie Games"
+* "Action RPG"
+* "Co-op Games"
+* "Dambuster Studios"
+* "Deep Silver"
+* "PS5"
+* "Xbox Series X"
+* "PC Gaming"
   platforms:
-* PlayStation 5
-* PlayStation 4
-* Xbox Series X/S
-* Xbox One
-* PC
+* "PlayStation 5"
+* "PlayStation 4"
+* "Xbox Series X/S"
+* "Xbox One"
+* "PC"
   developer: "Dambuster Studios"
   publisher: "Deep Silver"
   genre: "First-person action RPG"
@@ -33,31 +32,11 @@ tags:
   slug: "dead-island-2-review"
   featuredImage: "/images/reviews/dead-island-2-review.webp"
   featuredImageAlt: "Dead Island 2 review artwork showing zombie chaos in HELL-A"
-  seo:
-  title: "Dead Island 2 Review: Is HELL-A Worth Visiting?"
-  description: "Our Dead Island 2 review covers combat, gore, co-op, story, exploration, progression and whether this zombie sequel is worth playing today."
-  keywords:
+  seoTitle: "Dead Island 2 Review: Is HELL-A Worth Visiting?"
+  seoDescription: "Our Dead Island 2 review covers combat, gore, co-op, story, exploration, progression and whether this zombie sequel is worth playing today."
 
-  * Dead Island 2 review
-  * is Dead Island 2 worth playing
-  * Dead Island 2 co-op review
-  * Dead Island 2 PS5 review
-  * Dead Island 2 Xbox review
-  * Dead Island 2 PC review
-  * Dead Island 2 score
-    aeo:
-    question: "Is Dead Island 2 worth playing?"
-    answer: "Dead Island 2 is worth playing if you want brutal first-person melee combat, impressive gore and chaotic co-op with friends. It is less essential if you want a strong story, deep progression or consistently rewarding exploration."
-    geo:
-    summary: "Dead Island 2 is a stylish zombie action RPG set in HELL-A. Its best features are crunchy melee combat, detailed gore and co-op chaos, but its weak story, uneven enemy pacing and unrewarding progression keep it from being a must-play sequel."
-    entities:
-  * Dead Island 2
-  * Dead Island
-  * Dambuster Studios
-  * Deep Silver
-  * HELL-A
-  * FLESH system
-  * zombie action RPG
+---
+
 
 ---
 
