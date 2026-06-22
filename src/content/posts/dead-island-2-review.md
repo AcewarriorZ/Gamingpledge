@@ -49,22 +49,7 @@ This is not a disaster. Far from it.
 
 It is just not the undead comeback I hoped it would be.
 
-## Need to know
-
-| Detail              | Answer                                                  |
-| ------------------- | ------------------------------------------------------- |
-| Game                | Dead Island 2                                           |
-| Developer           | Dambuster Studios                                       |
-| Publisher           | Deep Silver                                             |
-| Genre               | First-person action RPG                                 |
-| Setting             | HELL-A, a zombie-infested version of Los Angeles        |
-| Play as             | One of six Slayers                                      |
-| Co-op               | Campaign co-op for up to three players                  |
-| Best feature        | The FLESH gore system                                   |
-| Biggest issue       | Weak story, uneven pacing and underwhelming progression |
-| Gaming Pledge score | 72/100                                                  |
-
-## The hook: when Dead Island 2 is good, it is disgustingly good
+## When Dead Island 2 is good, it is disgustingly good
 
 Let us get this out of the way.
 
