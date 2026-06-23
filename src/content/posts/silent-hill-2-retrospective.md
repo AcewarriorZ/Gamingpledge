@@ -3,7 +3,7 @@
 title: "Silent Hill 2: In my restless dreams, I see that town"
 description: "A retrospective on Silent Hill 2, Team Silent’s psychological horror masterpiece, and why its fog, guilt, monsters and memory still linger decades later."
 date: 2026-06-10
-image: "/images/posts/silent-hill-2-retrospective.webp"
+image: "/images/posts/silent-hill-2-retrospective.avif"
 authors: ["Kieren Shepherd"]
 categories: ["Retro", "Features"]
 tags: ["Silent Hill 2", "PS2", "Retro Games", "Survival Horror", "Konami", "Team Silent", "Retrospective"]

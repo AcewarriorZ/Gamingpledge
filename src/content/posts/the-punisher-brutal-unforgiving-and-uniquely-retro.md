@@ -3,7 +3,7 @@
 title: "The Punisher – Brutal, Unforgiving, and Uniquely Retro"
 description: "A PS2 review of The Punisher, Volition and THQ’s brutal Marvel shooter that turns Frank Castle’s war on crime into one of the grittiest licensed games of the era."
 date: 2026-06-12
-image: "/images/posts/the-punisher-brutal-unforgiving-and-uniquely-retro.webp"
+image: "/images/posts/the-punisher-brutal-unforgiving-and-uniquely-retro.avif"
 authors: ["Kieren Shepherd"]
 categories: ["Reviews"]
 tags: ["The Punisher", "PS2", "Marvel Games", "THQ", "Volition", "Retro Games", "Third Person Shooter"]

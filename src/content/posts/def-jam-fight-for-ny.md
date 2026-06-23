@@ -2,7 +2,7 @@
 title: "Def Jam: Fight for NY – Blazin’ Beats & Broken Teeth"
 description: "A PS2 review of Def Jam: Fight for NY, EA’s chaotic hip-hop brawler that turns street fighting, celebrity cameos and brutal arena combat into one of the most entertaining fighters of its era."
 date: 2026-06-05
-image: "/images/posts/def-jam-fight-for-ny.webp"
+image: "/images/posts/def-jam-fight-for-ny.avif"
 authors: ["Kieren Shepherd"]
 categories: ["Reviews"]
 tags: ["Def Jam", "PS2", "Fighting Games", "EA", "Retro Games", "Hip-Hop", "PlayStation 2"]

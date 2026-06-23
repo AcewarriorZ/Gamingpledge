@@ -3,7 +3,7 @@
 title: "Colosseum: Road to Freedom – The Brutal Beauty of Becoming a Legend"
 description: "A PS2 review of Colosseum: Road to Freedom, Koei’s gritty gladiator RPG where debt, blood, training and survival collide in the sand."
 date: 2026-06-04
-image: "/images/posts/colosseum-road-to-freedom-the-brutal-beauty-of-becoming-a-legend.webp"
+image: "/images/posts/colosseum-road-to-freedom-the-brutal-beauty-of-becoming-a-legend.avif"
 authors: ["Kieren Shepherd"]
 categories: ["Reviews"]
 tags: ["Colosseum Road to Freedom", "PS2", "Gladiator Games", "Koei", "Ertain", "Retro Games", "Action RPG"]
