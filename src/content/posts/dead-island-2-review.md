@@ -29,7 +29,7 @@ slug: "dead-island-2-review"
 ---
 ---
 
-# Dead Island 2 Review: A Gloriously Gory Holiday in HELL-A
+## Dead Island 2 Review: A Gloriously Gory Holiday in HELL-A
 
 Dead Island 2 is the kind of sequel you want to love immediately.
 
