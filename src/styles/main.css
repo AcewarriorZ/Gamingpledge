@@ -243,3 +243,23 @@ header {
   backdrop-filter: blur(14px);
   border-bottom: 1px solid rgba(255, 253, 247, 0.08);
 }
+/* Mobile hamburger menu colour fix */
+#show-button,
+#hide-button,
+label[for="nav-toggle"] {
+  color: var(--gp-cream) !important;
+}
+
+#show-button svg,
+#hide-button svg,
+label[for="nav-toggle"] svg {
+  color: var(--gp-cream) !important;
+  fill: var(--gp-cream) !important;
+  stroke: var(--gp-cream) !important;
+}
+
+#show-button span,
+#hide-button span,
+label[for="nav-toggle"] span {
+  background-color: var(--gp-cream) !important;
+}
