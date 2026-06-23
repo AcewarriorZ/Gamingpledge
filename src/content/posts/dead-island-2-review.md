@@ -3,7 +3,7 @@ title: "Dead Island 2 Review: A Gloriously Gory Holiday in HELL-A"
 meta_title: "Dead Island 2 Review: Is HELL-A Worth Visiting?"
 description: "Dead Island 2 delivers brilliant gore, crunchy melee combat and chaotic co-op, but weak progression, uneven pacing and a flat story hold it back."
 date: "2026-06-22T00:00:00.000Z"
-image: "/images/posts/dead-island-2-review.webp"
+image: "/images/posts/dead-island-2-review.avif"
 author: "Kieren Shepherd"
 categories:
   - "Reviews"
