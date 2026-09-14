@@ -2,7 +2,7 @@
 import { markdownify } from "@/lib/utils/textConverter";
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
-import { BsArrowRightCircle } from "react-icons/bs";
+import { FaCircleArrowRight } from "react-icons/fa6";
 
 type Props = {
   authors: CollectionEntry<"authors">[];
@@ -41,7 +41,7 @@ const { authors } = Astro.props;
           href={`/authors/${author.id}`}
           class="inline-flex items-center text-primary transition duration-200 hover:opacity-70"
         >
-          Read More <BsArrowRightCircle className="inline ml-2" />
+          Read More <FaCircleArrowRight className="inline ml-2" />
         </a>
       </div>
     ))

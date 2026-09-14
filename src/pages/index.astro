@@ -48,9 +48,7 @@ const featuredSections = [
     description:
       "Honest game reviews focused on feel, design and whether a game actually earns your time.",
     href: "/reviews",
-    tag: "Judgement Path",
     stat: "Critical Eye",
-    level: "LV.01",
     theme: "reviews",
   },
   {
@@ -59,9 +57,7 @@ const featuredSections = [
     description:
       "PS2-era classics, forgotten gems and older games that still have something worth saying.",
     href: "/retro",
-    tag: "Memory Path",
     stat: "Nostalgia Resist",
-    level: "LV.02",
     theme: "retro",
   },
   {
@@ -70,9 +66,7 @@ const featuredSections = [
     description:
       "Longer reads, deeper analysis and thoughtful pieces on games, genres, design and culture.",
     href: "/features",
-    tag: "Lore Path",
     stat: "Deep Dive",
-    level: "LV.03",
     theme: "features",
   },
   {
@@ -81,9 +75,7 @@ const featuredSections = [
     description:
       "Rankings, recommendations and curated picks to help you discover what to play next.",
     href: "/lists",
-    tag: "Discovery Path",
     stat: "Map Sense",
-    level: "LV.04",
     theme: "lists",
   },
 ];
@@ -254,14 +246,6 @@ const formatDate = (date: string) => {
                 <div class="gp-path-card-bg"></div>
                 <div class="gp-path-corner gp-path-corner-tl"></div>
                 <div class="gp-path-corner gp-path-corner-br"></div>
-
-                <div class="gp-path-top">
-                  <div class="gp-path-level">
-                    <span>{item.level}</span>
-                  </div>
-
-                  <div class="gp-path-tag">{item.tag}</div>
-                </div>
 
                 <div class="gp-path-copy">
                   <p class="gp-path-subtitle">{item.subtitle}</p>
@@ -716,11 +700,11 @@ const formatDate = (date: string) => {
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    min-height: 24rem;
+    min-height: 30rem;
     border-radius: 1.4rem;
     border: 1px solid rgba(255, 253, 247, 0.12);
     background: #181821;
-    padding: 1.4rem;
+    padding: 1.75rem;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
     transition:
       transform 0.35s ease,
@@ -745,8 +729,8 @@ const formatDate = (date: string) => {
 
   .gp-path-corner {
     position: absolute;
-    width: 1.8rem;
-    height: 1.8rem;
+    width: 2.25rem;
+    height: 2.25rem;
     opacity: 0.35;
   }
 
@@ -764,46 +748,14 @@ const formatDate = (date: string) => {
     border-bottom: 2px solid var(--path-accent);
   }
 
-  .gp-path-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-
-  .gp-path-level {
-    display: inline-flex;
-    width: 3.4rem;
-    height: 3.4rem;
-    align-items: center;
-    justify-content: center;
-    border-radius: 1rem;
-    border: 1px solid rgba(255, 253, 247, 0.12);
-    background: rgba(255, 253, 247, 0.06);
-    color: var(--path-accent);
-    font-size: 0.78rem;
-    font-weight: 900;
-  }
-
-  .gp-path-tag {
-    border-radius: 9999px;
-    background: rgba(255, 253, 247, 0.08);
-    padding: 0.5rem 0.72rem;
-    color: #b8b1c7;
-    font-size: 0.66rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-  }
-
   .gp-path-copy {
-    margin-top: 1.8rem;
+    margin-top: 0;
   }
 
   .gp-path-subtitle {
-    margin: 0 0 0.55rem;
+    margin: 0 0 0.7rem;
     color: var(--path-accent);
-    font-size: 0.74rem;
+    font-size: 0.925rem;
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 0.16em;
@@ -812,35 +764,35 @@ const formatDate = (date: string) => {
   .gp-path-copy h3 {
     margin: 0;
     color: #fffdf7;
-    font-size: clamp(2rem, 2.4vw, 2.5rem);
+    font-size: clamp(2.5rem, 3vw, 3.125rem);
     line-height: 0.95;
     font-weight: 900;
     letter-spacing: -0.05em;
   }
 
   .gp-path-copy > p:last-child {
-    margin-top: 1rem;
+    margin-top: 1.25rem;
     color: #b8b1c7;
-    font-size: 1rem;
+    font-size: 1.25rem;
     line-height: 1.7;
   }
 
   .gp-path-stat {
-    margin-top: 1.7rem;
+    margin-top: 2.125rem;
   }
 
   .gp-path-stat > span {
     display: block;
-    margin-bottom: 0.65rem;
+    margin-bottom: 0.8rem;
     color: #fffdf7;
-    font-size: 0.72rem;
+    font-size: 0.9rem;
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 0.14em;
   }
 
   .gp-path-meter {
-    height: 0.55rem;
+    height: 0.6875rem;
     overflow: hidden;
     border-radius: 9999px;
     background: rgba(255, 253, 247, 0.1);
@@ -860,11 +812,12 @@ const formatDate = (date: string) => {
   }
 
   .gp-path-bottom {
-    margin-top: 1.4rem;
+    margin-top: 1.75rem;
   }
 
   .gp-path-bottom span {
     color: #fffdf7;
+    font-size: 1.05rem;
     font-weight: 900;
   }
 

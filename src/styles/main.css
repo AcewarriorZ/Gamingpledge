@@ -148,8 +148,8 @@ header .container-fluid,
 .navbar .container-fluid,
 .site-header .container,
 .site-header .container-fluid {
-  width: min(70rem, calc(100vw - 3rem));
-  max-width: 70rem;
+  width: 75%;
+  max-width: none;
   margin-inline: auto;
 }
 

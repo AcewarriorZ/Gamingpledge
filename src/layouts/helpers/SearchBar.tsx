@@ -2,7 +2,7 @@ import dateFormat from "@/lib/utils/dateFormat";
 import { humanize, slugify } from "@/lib/utils/textConverter";
 import Fuse from "fuse.js";
 import React, { useEffect, useRef, useState } from "react";
-import { BiCalendarEdit, BiCategoryAlt } from "react-icons/bi";
+import { FaCalendarDays, FaTableCellsLarge } from "react-icons/fa6";
 
 export type SearchItem = {
   slug: string;
@@ -107,11 +107,11 @@ export default function SearchBar({ searchList }: Props) {
 
             <ul className="mt-6 mb-4 flex flex-wrap items-center text-text">
               <li className="mr-5 flex items-center flex-wrap font-medium">
-                <BiCalendarEdit className="mr-1 h-5 w-5 text-gray-600" />
+                <FaCalendarDays className="mr-1 h-5 w-5 text-gray-600" />
                 <>{dateFormat(item.data.date)}</>
               </li>
               <li className="mr-5 flex items-center flex-wrap">
-                <BiCategoryAlt className="mr-1 h-[18px] w-[18px] text-gray-600" />
+                <FaTableCellsLarge className="mr-1 h-[18px] w-[18px] text-gray-600" />
                 <>
                   <ul>
                     {item.data.categories.map((category: string, i: number) => (
